@@ -1,18 +1,60 @@
-[gd_scene load_steps=3 format=3 uid="uid://c1frmlc7xgi4u"]
+[gd_scene load_steps=11 format=3 uid="uid://c1frmlc7xgi4u"]
+
+[ext_resource type="Script" path="res://scripts/ChaseCam.gd" id="1_ec0n0"]
+[ext_resource type="PackedScene" uid="uid://c3615mg6hyw76" path="res://scenes/chicken_egg.tscn" id="2_r8yhr"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o8db5"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_xtiob"]
+sky_material = SubResource("ProceduralSkyMaterial_o8db5")
+
+[sub_resource type="Environment" id="Environment_qb4o2"]
+background_mode = 2
+sky = SubResource("Sky_xtiob")
+tonemap_mode = 2
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qhpct"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_l358u"]
 size = Vector2(200, 200)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ao0y5"]
+noise_type = 4
+frequency = 0.7651
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t17vk"]
+seamless = true
+noise = SubResource("FastNoiseLite_ao0y5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8eng"]
+albedo_color = Color(0.286275, 0.286275, 0.286275, 1)
+albedo_texture = SubResource("NoiseTexture2D_t17vk")
+uv1_scale = Vector3(20, 20, 20)
+
 [node name="World" type="Node3D"]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qb4o2")
+
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("WorldBoundaryShape3D_qhpct")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("PlaneMesh_l358u")
+surface_material_override/0 = SubResource("StandardMaterial3D_w8eng")
 
-[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+[node name="ChaseCam" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.81293, 10.717)
+script = ExtResource("1_ec0n0")
+
+[node name="ChickenEgg" parent="." instance=ExtResource("2_r8yhr")]
