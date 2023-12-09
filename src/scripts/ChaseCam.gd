@@ -2,7 +2,7 @@ extends Camera3D
 
 
 const NORMAL_FOV = 75.0
-const SPRINT_FOV = 90.0
+const SPRINT_FOV = 82.0
 
 
 var global: Node
@@ -36,12 +36,12 @@ func _process(delta):
 		global_transform = global_transform.interpolate_with(x_form_target.global_transform, 0.2)
 	if fov_changing:
 		if player_sprinting:
-			fov = lerp(fov, SPRINT_FOV, 0.1)
+			fov = lerp(fov, SPRINT_FOV, 0.05)
 			if is_equal_approx(fov, SPRINT_FOV):
 				fov = SPRINT_FOV
 				fov_changing = false
 		else:
-			fov = lerp(fov, NORMAL_FOV, 0.1)
+			fov = lerp(fov, NORMAL_FOV, 0.05)
 			if is_equal_approx(fov, NORMAL_FOV):
 				fov = NORMAL_FOV
 				fov_changing = false

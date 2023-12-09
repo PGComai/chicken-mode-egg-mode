@@ -1,12 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://c3615mg6hyw76"]
+[gd_scene load_steps=16 format=3 uid="uid://bge4lcf1dkp0t"]
 
-[ext_resource type="Script" path="res://scripts/chicken_egg.gd" id="1_4cn5f"]
-[ext_resource type="Script" path="res://scripts/Skeletor.gd" id="1_ax3js"]
-[ext_resource type="Animation" uid="uid://dye4vatmrhkym" path="res://textures/eggrun-animation.res" id="1_g1fq2"]
-[ext_resource type="Material" uid="uid://eqm68d06kgkw" path="res://textures/egshell_material.tres" id="4_isp0r"]
-[ext_resource type="Material" uid="uid://bw40mrqtssus0" path="res://textures/leg_material.tres" id="4_rdq6j"]
-[ext_resource type="Material" uid="uid://dfifd0koa1foh" path="res://textures/foot_material.tres" id="6_4u4i3"]
-[ext_resource type="AudioStream" uid="uid://uyo70etg3qi2" path="res://audio/baby-pop.ogg" id="7_qkjgk"]
+[ext_resource type="Animation" uid="uid://dye4vatmrhkym" path="res://textures/eggrun-animation.res" id="2_lum5a"]
+[ext_resource type="Script" path="res://scripts/Skeletor.gd" id="3_hj0at"]
+[ext_resource type="Material" uid="uid://bw40mrqtssus0" path="res://textures/leg_material.tres" id="5_mjq0y"]
+[ext_resource type="Material" uid="uid://dfifd0koa1foh" path="res://textures/foot_material.tres" id="6_ntwtf"]
+[ext_resource type="AudioStream" uid="uid://uyo70etg3qi2" path="res://audio/baby-pop.ogg" id="7_hvjsv"]
 
 [sub_resource type="Animation" id="Animation_ph2a8"]
 resource_name = "RESET"
@@ -554,12 +552,15 @@ tracks/39/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, 0, 1)
 _data = {
 "RESET": SubResource("Animation_ph2a8"),
 "eggjumpL": SubResource("Animation_unw63"),
-"eggrun": ExtResource("1_g1fq2")
+"eggrun": ExtResource("2_lum5a")
 }
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m13qj"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_qdbs1"]
+[sub_resource type="SphereMesh" id="SphereMesh_7ow54"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yybu4"]
+albedo_color = Color(0.501961, 0.427451, 0.356863, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_dby8l"]
 top_radius = 0.02
@@ -573,11 +574,14 @@ height = 0.08
 [sub_resource type="BoxMesh" id="BoxMesh_ggsow"]
 size = Vector3(0.1, 0.02, 0.3)
 
-[node name="ChickenEgg" type="CharacterBody3D"]
+[sub_resource type="SphereMesh" id="SphereMesh_3sp01"]
+radius = 0.2
+height = 0.4
+
+[node name="ChickenChicken" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 3
 floor_snap_length = 0.32
-script = ExtResource("1_4cn5f")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -607,14 +611,14 @@ bones/1/rotation = Quaternion(0, 0, 0, 1)
 bones/1/scale = Vector3(1, 1, 1)
 bones/2/name = "Spine2"
 bones/2/parent = 1
-bones/2/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+bones/2/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
 bones/2/enabled = true
 bones/2/position = Vector3(0, 0.3, 0)
 bones/2/rotation = Quaternion(0, 0, 0, 1)
 bones/2/scale = Vector3(1, 1, 1)
 bones/3/name = "Head"
 bones/3/parent = 2
-bones/3/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+bones/3/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
 bones/3/enabled = true
 bones/3/position = Vector3(0, 0.3, 0)
 bones/3/rotation = Quaternion(0, 0, 0, 1)
@@ -731,8 +735,8 @@ bones/19/enabled = true
 bones/19/position = Vector3(0, 0, -0.2)
 bones/19/rotation = Quaternion(0, 0, 0, 1)
 bones/19/scale = Vector3(1, 1, 1)
-script = ExtResource("1_ax3js")
-head_height = 0.3
+script = ExtResource("3_hj0at")
+head_height = 0.7
 shoulder_height = 0.3
 
 [node name="Egg" type="BoneAttachment3D" parent="Skeleton3D"]
@@ -742,8 +746,8 @@ bone_idx = 0
 
 [node name="EggMesh" type="MeshInstance3D" parent="Skeleton3D/Egg"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.406467, 0)
-mesh = SubResource("SphereMesh_qdbs1")
-surface_material_override/0 = ExtResource("4_isp0r")
+mesh = SubResource("SphereMesh_7ow54")
+surface_material_override/0 = SubResource("StandardMaterial3D_yybu4")
 
 [node name="ThighL" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.9, 0)
@@ -753,12 +757,12 @@ bone_idx = 12
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/ThighL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
 mesh = SubResource("CylinderMesh_dby8l")
-surface_material_override/0 = ExtResource("4_rdq6j")
+surface_material_override/0 = ExtResource("5_mjq0y")
 
 [node name="Knee" type="MeshInstance3D" parent="Skeleton3D/ThighL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 mesh = SubResource("SphereMesh_xlax6")
-surface_material_override/0 = ExtResource("4_rdq6j")
+surface_material_override/0 = ExtResource("5_mjq0y")
 
 [node name="ThighR" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.9, 0)
@@ -769,12 +773,12 @@ bone_idx = 16
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
 mesh = SubResource("CylinderMesh_dby8l")
 skeleton = NodePath("../../ThighL")
-surface_material_override/0 = ExtResource("4_rdq6j")
+surface_material_override/0 = ExtResource("5_mjq0y")
 
 [node name="Knee" type="MeshInstance3D" parent="Skeleton3D/ThighR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 mesh = SubResource("SphereMesh_xlax6")
-surface_material_override/0 = ExtResource("4_rdq6j")
+surface_material_override/0 = ExtResource("5_mjq0y")
 
 [node name="ShinL" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.45, 0)
@@ -784,7 +788,7 @@ bone_idx = 13
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/ShinL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
 mesh = SubResource("CylinderMesh_dby8l")
-surface_material_override/0 = ExtResource("4_rdq6j")
+surface_material_override/0 = ExtResource("5_mjq0y")
 
 [node name="ShinR" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.45, 0)
@@ -794,7 +798,7 @@ bone_idx = 17
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/ShinR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.225, 0)
 mesh = SubResource("CylinderMesh_dby8l")
-surface_material_override/0 = ExtResource("4_rdq6j")
+surface_material_override/0 = ExtResource("5_mjq0y")
 
 [node name="FootL" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 0)
@@ -804,10 +808,10 @@ bone_idx = 14
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/FootL"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05)
 mesh = SubResource("BoxMesh_ggsow")
-surface_material_override/0 = ExtResource("6_4u4i3")
+surface_material_override/0 = ExtResource("6_ntwtf")
 
 [node name="FootStepL" type="AudioStreamPlayer3D" parent="Skeleton3D/FootL/MeshInstance3D"]
-stream = ExtResource("7_qkjgk")
+stream = ExtResource("7_hvjsv")
 unit_size = 2.25
 max_distance = 100.0
 
@@ -819,12 +823,20 @@ bone_idx = 18
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/FootR"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05)
 mesh = SubResource("BoxMesh_ggsow")
-surface_material_override/0 = ExtResource("6_4u4i3")
+surface_material_override/0 = ExtResource("6_ntwtf")
 
 [node name="FootStepR" type="AudioStreamPlayer3D" parent="Skeleton3D/FootR/MeshInstance3D"]
-stream = ExtResource("7_qkjgk")
+stream = ExtResource("7_hvjsv")
 unit_size = 2.25
 max_distance = 100.0
+
+[node name="Head" type="BoneAttachment3D" parent="Skeleton3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+bone_name = "Spine2"
+bone_idx = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/Head"]
+mesh = SubResource("SphereMesh_3sp01")
 
 [node name="CamHingeH" type="Node3D" parent="."]
 top_level = true
@@ -837,6 +849,3 @@ spring_length = 7.0
 
 [node name="CamXForm" type="Node3D" parent="CamHingeH/CamHingeV/SpringArm3D"]
 transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.454443, 7.07872)
-
-[node name="BounceTimer" type="Timer" parent="."]
-wait_time = 0.3

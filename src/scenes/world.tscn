@@ -1,6 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://c1frmlc7xgi4u"]
+[gd_scene load_steps=16 format=3 uid="uid://c1frmlc7xgi4u"]
 
 [ext_resource type="Script" path="res://scripts/ChaseCam.gd" id="1_ec0n0"]
+[ext_resource type="Material" uid="uid://cv5uuqh47444d" path="res://textures/cast_iron_material.tres" id="1_g75ek"]
+[ext_resource type="Material" uid="uid://ce68ij2dt2yja" path="res://textures/cast_iron_walkway_material.tres" id="2_886uu"]
 [ext_resource type="PackedScene" uid="uid://c3615mg6hyw76" path="res://scenes/chicken_egg.tscn" id="2_r8yhr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o8db5"]
@@ -15,17 +17,32 @@ background_mode = 2
 sky = SubResource("Sky_xtiob")
 tonemap_mode = 2
 
+[sub_resource type="PrismMesh" id="PrismMesh_gb7kr"]
+left_to_right = 1.0
+size = Vector3(20, 3, 5)
+
+[sub_resource type="PrismMesh" id="PrismMesh_v8x63"]
+left_to_right = 1.0
+size = Vector3(14, 8, 5)
+
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qhpct"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_l358u"]
 size = Vector2(200, 200)
 
+[sub_resource type="Gradient" id="Gradient_jymg0"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.676471)
+colors = PackedColorArray(0.209908, 0.209908, 0.209908, 1, 0.775063, 0.775063, 0.775063, 1)
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ao0y5"]
 noise_type = 4
-frequency = 0.7651
+frequency = 0.9576
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t17vk"]
 seamless = true
+seamless_blend_skirt = 0.005
+color_ramp = SubResource("Gradient_jymg0")
 noise = SubResource("FastNoiseLite_ao0y5")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8eng"]
@@ -42,14 +59,93 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qb4o2")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Pan" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3994, 0)
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Pan"]
+use_collision = true
+inner_radius = 40.0
+outer_radius = 50.0
+sides = 32
+ring_sides = 32
+material = ExtResource("1_g75ek")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Pan/CSGTorus3D"]
+radius = 45.0
+height = 10.0
+sides = 32
+material = ExtResource("1_g75ek")
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+operation = 2
+inner_radius = 30.0
+outer_radius = 47.0
+sides = 32
+ring_sides = 32
+material = ExtResource("1_g75ek")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+operation = 2
+radius = 38.5
+height = 17.0
+sides = 32
+material = ExtResource("1_g75ek")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.32661, 0)
+operation = 2
+radius = 50.0
+sides = 32
+material = ExtResource("1_g75ek")
+
+[node name="Ramp" type="CSGMesh3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1, -18)
+mesh = SubResource("PrismMesh_gb7kr")
+material = ExtResource("2_886uu")
+
+[node name="Ramp2" type="CSGMesh3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -23.2321, 0.4, 14.8045)
+mesh = SubResource("PrismMesh_v8x63")
+material = ExtResource("2_886uu")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, -2.1, -13.6157)
+size = Vector3(13, 3, 24.2314)
+material = ExtResource("2_886uu")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0.4, 13.2686)
+size = Vector3(13, 8, 6)
+material = ExtResource("2_886uu")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2321, 0.4, 16.8045)
+size = Vector3(17, 8, 18)
+material = ExtResource("2_886uu")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.2321, 0.4, 23.8045)
+size = Vector3(5, 8, 4)
+material = ExtResource("2_886uu")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Pan/CSGTorus3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2321, -0.0999999, 17.0164)
+operation = 2
+size = Vector3(15, 6.8, 18.9561)
+material = ExtResource("1_g75ek")
+
+[node name="Bedrock" type="StaticBody3D" parent="."]
+visible = false
 collision_layer = 3
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Bedrock"]
 shape = SubResource("WorldBoundaryShape3D_qhpct")
+disabled = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bedrock"]
 mesh = SubResource("PlaneMesh_l358u")
 surface_material_override/0 = SubResource("StandardMaterial3D_w8eng")
 
