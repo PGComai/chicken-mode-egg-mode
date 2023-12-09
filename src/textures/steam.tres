@@ -1,0 +1,62 @@
+[gd_resource type="VisualShader" load_steps=5 format=3 uid="uid://cvo7vvh24dqsf"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ul3jb"]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_03p33"]
+constant = 0.01
+
+[sub_resource type="VisualShaderNodeFresnel" id="VisualShaderNodeFresnel_ypqa5"]
+default_input_values = [2, true, 3, 1.0]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_1je8x"]
+operator = 2
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled, vertex_lighting;
+
+
+
+
+void fragment() {
+// Input:2
+	vec4 n_out2p0 = COLOR;
+
+
+// Fresnel:4
+	float n_in4p3 = 1.00000;
+	float n_out4p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_in4p3);
+
+
+// FloatConstant:3
+	float n_out3p0 = 0.010000;
+
+
+// FloatOp:5
+	float n_out5p0 = n_out4p0 * n_out3p0;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out5p0;
+
+
+}
+"
+graph_offset = Vector2(-505.938, -187.231)
+flags/unshaded = true
+flags/shadows_disabled = true
+flags/ambient_light_disabled = true
+flags/vertex_lighting = true
+nodes/vertex/0/position = Vector2(820, 60)
+nodes/fragment/0/position = Vector2(1500, 280)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_ul3jb")
+nodes/fragment/2/position = Vector2(700, 140)
+nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_03p33")
+nodes/fragment/3/position = Vector2(680, 640)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFresnel_ypqa5")
+nodes/fragment/4/position = Vector2(200, 280)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_1je8x")
+nodes/fragment/5/position = Vector2(1000, 360)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 5, 1, 5, 0, 0, 1, 4, 0, 5, 0)

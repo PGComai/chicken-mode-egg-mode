@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cv5uuqh47444d"]
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://dhuh4fofxsyah"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ueudn"]
 noise_type = 4
@@ -12,10 +12,10 @@ bump_strength = 2.4
 noise = SubResource("FastNoiseLite_ueudn")
 
 [resource]
-albedo_color = Color(0.117647, 0.117647, 0.117647, 1)
+albedo_color = Color(0.184314, 0.317647, 0.341176, 1)
 metallic = 0.78
 metallic_specular = 0.37
-roughness = 0.6
+roughness = 0.79
 normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_wv7gp")
 uv1_scale = Vector3(0.1, 0.1, 0.1)

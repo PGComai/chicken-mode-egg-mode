@@ -57,6 +57,15 @@ sprint={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_3="Hot"
+3d_physics/layer_4="Slippery"
+
+[physics]
+
+3d/default_gravity=20.0
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
