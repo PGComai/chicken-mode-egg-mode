@@ -11,6 +11,8 @@ const FALL_DAMAGE_VELOCITY = -18.0
 const DETECT_RANGE = 8.0
 const BEHIND_RANGE = 1.0
 const ACTIVE_RANGE = 20.0
+const MAX_HEALTH = 10.0
+const FORK_DAMAGE = 4.0
 
 @export var left_foot_back := false
 @export var patrol_points: Array[Node3D]
@@ -76,6 +78,16 @@ var player_position_known := false:
 				navigation_agent_3d.target_position = nav_target_pos
 				print("lost player")
 var last_player_position: Vector3
+var damaged := false
+var health := 10.0:
+	set(value):
+		health = value
+		if health <= 0.0:
+			_die()
+		else:
+			damaged = true
+			velocity.y = JUMP_VELOCITY
+var charging := false
 
 
 func _ready():
@@ -108,14 +120,17 @@ func _physics_process(delta):
 			cast_target = cast_target * DETECT_RANGE
 		player_cast.target_position = cast_target
 		
-		if player_cast.is_colliding():
+		if player_cast.is_colliding() and not charging:
 			var collider : Object = player_cast.get_collider()
 			if collider.has_meta("player"):
 				search_timer.start()
 				player_position_known = true
-				last_player_position = player_node.global_position#player_cast.get_collision_point()
+				last_player_position = player_node.global_position
 				nav_target_pos = last_player_position
 				navigation_agent_3d.target_position = last_player_position
+				var dist2target = navigation_agent_3d.distance_to_target()
+				if dist2target <= 10.0:
+					charging = true
 			else:
 				if not looking_for_player:
 					player_position_known = false
@@ -165,12 +180,23 @@ func _physics_process(delta):
 	var direction : Vector3 = Vector3(input_dir.x, 0.0, input_dir.y).normalized()
 	var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
 	
-	if stop_and_look:
+	if damaged:
+		velocity.x = lerp(velocity.x, 0.0, 0.3)
+		velocity.z = lerp(velocity.z, 0.0, 0.3)
+		animation_player.current_animation = "damaged"
+		animation_player.speed_scale = 1.0
+	elif stop_and_look:
 		velocity.x = lerp(velocity.x, 0.0, 0.3)
 		velocity.z = lerp(velocity.z, 0.0, 0.3)
 		rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
 		animation_player.current_animation = "alerted"
 		animation_player.speed_scale = 1.0
+	elif charging:
+		velocity.x = lerp(velocity.x, direction.x * SPEED * sprint * 4.0, 0.05)
+		velocity.z = lerp(velocity.z, direction.z * SPEED * sprint * 4.0, 0.05)
+		animation_player.current_animation = "forkcharge-animation"
+		rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.05)
+		animation_player.speed_scale = 4.0 * EGG_RUN_SPEED_SCALE * sprint * slipping_animation_multiplier
 	elif direction:
 		#print("moving")
 		velocity.x = lerp(velocity.x, direction.x * SPEED * sprint, 0.1)
@@ -198,6 +224,10 @@ func _physics_process(delta):
 #endregion
 
 
+func _die():
+	queue_free()
+
+
 func _on_global_player_node_changed(value):
 	if player_node_queued:
 		player_node_queued = false
@@ -211,13 +241,26 @@ func _on_navigation_agent_3d_target_reached():
 			patrol_idx = 0
 		nav_target_pos = patrol_points[patrol_idx].global_position
 		navigation_agent_3d.target_position = nav_target_pos
+		charging = false
 
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "alerted":
 		stop_and_look = false
+	elif anim_name == "damaged":
+		damaged = false
+		if not looking_for_player:
+			looking_for_player = true
 
 
 func _on_search_timer_timeout():
-	print("search timer timeout")
-	looking_for_player = false
+	if charging:
+		search_timer.start()
+	else:
+		print("search timer timeout")
+		looking_for_player = false
+
+
+func _on_fork_damager_body_entered(body):
+	if body.is_in_group("damageable"):
+		pass

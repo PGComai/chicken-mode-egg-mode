@@ -8,6 +8,8 @@ const SENSITIVITY = 0.003
 const EGG_RUN_SPEED_SCALE = 2.0
 const SPRINT_MULTIPLIER = 1.5
 const FALL_DAMAGE_VELOCITY = -18.0
+const WIND_GUST = preload("res://scenes/wind_gust.tscn")
+const MAX_HEALTH = 15.0
 
 @export var left_foot_back := false
 @export var damaged := false:
@@ -19,7 +21,9 @@ const FALL_DAMAGE_VELOCITY = -18.0
 		egg_mode = value
 		_mode_switch()
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
+var health := 15.0:
+	set(value):
+		health = value
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var global: Node
 var rot_h := 0.0
@@ -57,6 +61,10 @@ var running_animation := "eggrun"
 var mode_speed_multiplier := 1.0
 var mode_fall_multiplier := 1.0
 var attacking := false
+var fire_wind_gust := false:
+	set(value):
+		if value:
+			_fire_wind_gust()
 
 @onready var cam_hinge_h = $CamHingeH
 @onready var cam_hinge_v = $CamHingeH/CamHingeV
@@ -76,6 +84,8 @@ var attacking := false
 @onready var wing_2_l = $Skeleton3D/ForeArmL/Wing2
 @onready var wing_1_r = $Skeleton3D/BicepR/Wing1
 @onready var wing_2_r = $Skeleton3D/ForeArmR/Wing2
+@onready var attack_origin = $CamHingeH/CamHingeV/AttackOrigin
+
 
 
 func _ready():
@@ -168,6 +178,17 @@ func _physics_process(delta):
 			animation_player.current_animation = running_animation
 			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
 			animation_player.speed_scale = EGG_RUN_SPEED_SCALE * sprint * slipping_animation_multiplier * mode_speed_multiplier
+		elif attacking:
+			body_face_angle = cam_hinge_h.transform.basis.z.signed_angle_to(Vector3.BACK, Vector3.UP)
+			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
+			if not falling:
+				velocity.x = lerp(velocity.x, 0.0, 0.3)
+				velocity.z = lerp(velocity.z, 0.0, 0.3)
+			else:
+				velocity.x = lerp(velocity.x, direction.x * SPEED * sprint * mode_speed_multiplier, 0.01)
+				velocity.z = lerp(velocity.z, direction.z * SPEED * sprint * mode_speed_multiplier, 0.01)
+			animation_player.current_animation = "chickengust"
+			animation_player.speed_scale = 3.0
 		elif falling:
 			velocity.x = lerp(velocity.x, direction.x * SPEED * sprint * mode_speed_multiplier, 0.01)
 			velocity.z = lerp(velocity.z, direction.z * SPEED * sprint * mode_speed_multiplier, 0.01)
@@ -181,19 +202,20 @@ func _physics_process(delta):
 			if not stopped:
 				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.01)
 			animation_player.speed_scale = 4.0
-		elif attacking:
-			body_face_angle = cam_hinge_h.transform.basis.z.signed_angle_to(Vector3.BACK, Vector3.UP)
-			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
-			velocity.x = lerp(velocity.x, 0.0, 0.3)
-			velocity.z = lerp(velocity.z, 0.0, 0.3)
-			animation_player.current_animation = "chickengust"
-			animation_player.speed_scale = 3.0
 		else:
 			velocity.x = lerp(velocity.x, 0.0, 0.3)
 			velocity.z = lerp(velocity.z, 0.0, 0.3)
 			animation_player.current_animation = "RESET"
 		
 		move_and_slide()
+
+
+func _fire_wind_gust():
+	var wg = WIND_GUST.instantiate()
+	wg.velocity = -attack_origin.global_transform.basis.z
+	add_child(wg)
+	wg.global_transform = attack_origin.global_transform
+	
 
 
 func _mode_switch():
@@ -243,3 +265,4 @@ func _on_animation_player_animation_finished(anim_name):
 		fall_damaged = false
 	elif anim_name == "chickengust":
 		attacking = false
+		fire_wind_gust = true

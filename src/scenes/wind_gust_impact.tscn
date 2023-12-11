@@ -1,0 +1,47 @@
+[gd_scene load_steps=9 format=3 uid="uid://dc4vanynkxifc"]
+
+[ext_resource type="Material" uid="uid://rvj7v3d02pgn" path="res://textures/wind_gust_material.tres" id="1_mbvog"]
+[ext_resource type="Script" path="res://scripts/wind_gust_impact.gd" id="2_sv4b8"]
+
+[sub_resource type="Gradient" id="Gradient_haxbf"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1s3ny"]
+gradient = SubResource("Gradient_haxbf")
+
+[sub_resource type="Curve" id="Curve_fsff1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.274554, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xp6ja"]
+curve = SubResource("Curve_fsff1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_otsov"]
+direction = Vector3(0, 0, -1)
+flatness = 0.13
+initial_velocity_min = 4.1
+initial_velocity_max = 4.45
+gravity = Vector3(0, 0, 5)
+scale_curve = SubResource("CurveTexture_xp6ja")
+color_ramp = SubResource("GradientTexture1D_1s3ny")
+
+[sub_resource type="SphereMesh" id="SphereMesh_adrpu"]
+
+[node name="WindGustImpact" type="GPUParticles3D"]
+material_override = ExtResource("1_mbvog")
+cast_shadow = 0
+emitting = false
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 15
+interpolate = false
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_otsov")
+draw_pass_1 = SubResource("SphereMesh_adrpu")
+script = ExtResource("2_sv4b8")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

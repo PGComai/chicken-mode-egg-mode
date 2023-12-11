@@ -75,6 +75,7 @@ attack={
 
 3d_physics/layer_3="Hot"
 3d_physics/layer_4="Slippery"
+3d_physics/layer_5="Attack"
 
 [physics]
 

@@ -1,0 +1,75 @@
+[gd_scene load_steps=11 format=3 uid="uid://wkr3bqa475kw"]
+
+[ext_resource type="Script" path="res://scripts/wind_gust.gd" id="1_1eswh"]
+[ext_resource type="Material" uid="uid://rvj7v3d02pgn" path="res://textures/wind_gust_material.tres" id="2_q5ysv"]
+
+[sub_resource type="Gradient" id="Gradient_mg7w8"]
+colors = PackedColorArray(1, 1, 1, 0.682353, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5f04f"]
+gradient = SubResource("Gradient_mg7w8")
+
+[sub_resource type="Curve" id="Curve_7ijk2"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.190763, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_b8nrr"]
+curve = SubResource("Curve_7ijk2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qcj3w"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_b8nrr")
+color_ramp = SubResource("GradientTexture1D_5f04f")
+
+[sub_resource type="TorusMesh" id="TorusMesh_vxocc"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_jh26y"]
+height = 1.4
+radius = 0.2
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dx2oq"]
+height = 0.6
+radius = 1.0
+
+[node name="WindGust" type="Node3D"]
+top_level = true
+script = ExtResource("1_1eswh")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="Timer2" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = ExtResource("2_q5ysv")
+cast_shadow = 0
+fixed_fps = 15
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_qcj3w")
+draw_pass_1 = SubResource("TorusMesh_vxocc")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_jh26y")
+
+[node name="Area3D2" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 17
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D2"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_dx2oq")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer2" to="." method="_on_timer_2_timeout"]
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_entered" from="Area3D2" to="." method="_on_area_3d_2_body_entered"]
