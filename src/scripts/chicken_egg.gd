@@ -14,6 +14,10 @@ const FALL_DAMAGE_VELOCITY = -18.0
 	set(value):
 		damaged = value
 		_eggshell_effect()
+@export var egg_mode := true:
+	set(value):
+		egg_mode = value
+		_mode_switch()
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -49,6 +53,8 @@ var slipping := false:
 				slipping_animation_multiplier = 2.0
 			else:
 				slipping_animation_multiplier = 1.0
+var running_animation := "eggrun"
+var mode_speed_multiplier := 1.0
 
 @onready var cam_hinge_h = $CamHingeH
 @onready var cam_hinge_v = $CamHingeH/CamHingeV
@@ -61,6 +67,9 @@ var slipping := false:
 @onready var steam = $Skeleton3D/Egg/EggMesh/Steam
 @onready var hot_cast = $HotCast
 @onready var slippery_cast = $SlipperyCast
+@onready var neck_mesh = $Skeleton3D/Neck/NeckMesh
+@onready var head_mesh = $Skeleton3D/Head/HeadMesh
+@onready var beak_mesh = $Skeleton3D/Head/BeakMesh
 
 
 func _ready():
@@ -83,10 +92,12 @@ func _process(delta):
 
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("modeswitch"):
+		egg_mode = not egg_mode
 	var sprint := 1.0
 	
-	if Input.is_action_pressed("sprint"):
-		sprint = SPRINT_MULTIPLIER
+	#if Input.is_action_pressed("sprint"):
+		#sprint = SPRINT_MULTIPLIER
 	
 	cam_hinge_h.rotation.y = rot_h
 	cam_hinge_v.rotation.x = rot_v
@@ -128,22 +139,22 @@ func _physics_process(delta):
 			if is_equal_approx(sprint, SPRINT_MULTIPLIER):
 				emit_signal("sprinting", true)
 		
-		if Input.is_action_just_pressed("sprint") and not stopped:
-			emit_signal("sprinting", true)
-		elif Input.is_action_just_released("sprint"):
-			emit_signal("sprinting", false)
+		#if Input.is_action_just_pressed("sprint") and not stopped:
+			#emit_signal("sprinting", true)
+		#elif Input.is_action_just_released("sprint"):
+			#emit_signal("sprinting", false)
 		
 		var direction : Vector3 = (cam_hinge_h.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
 		if direction and not falling:
-			velocity.x = lerp(velocity.x, direction.x * SPEED * sprint, 0.1)
-			velocity.z = lerp(velocity.z, direction.z * SPEED * sprint, 0.1)
-			animation_player.current_animation = "eggrun"
+			velocity.x = lerp(velocity.x, direction.x * SPEED * sprint * mode_speed_multiplier, 0.1)
+			velocity.z = lerp(velocity.z, direction.z * SPEED * sprint * mode_speed_multiplier, 0.1)
+			animation_player.current_animation = running_animation
 			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
-			animation_player.speed_scale = EGG_RUN_SPEED_SCALE * sprint * slipping_animation_multiplier
+			animation_player.speed_scale = EGG_RUN_SPEED_SCALE * sprint * slipping_animation_multiplier * mode_speed_multiplier
 		elif falling:
-			velocity.x = lerp(velocity.x, direction.x * SPEED * sprint, 0.01)
-			velocity.z = lerp(velocity.z, direction.z * SPEED * sprint, 0.01)
+			velocity.x = lerp(velocity.x, direction.x * SPEED * sprint * mode_speed_multiplier, 0.01)
+			velocity.z = lerp(velocity.z, direction.z * SPEED * sprint * mode_speed_multiplier, 0.01)
 			if left_foot_back:
 				animation_player.current_animation = "eggmidairL"
 			else:
@@ -157,6 +168,21 @@ func _physics_process(delta):
 			animation_player.current_animation = "RESET"
 		
 		move_and_slide()
+
+
+func _mode_switch():
+	if egg_mode:
+		neck_mesh.visible = false
+		head_mesh.visible = false
+		beak_mesh.visible = false
+		running_animation = "eggrun"
+		mode_speed_multiplier = 1.0
+	else:
+		neck_mesh.visible = true
+		head_mesh.visible = true
+		beak_mesh.visible = true
+		running_animation = "chickenrun"
+		mode_speed_multiplier = 1.8
 
 
 func _steaming_effect():
