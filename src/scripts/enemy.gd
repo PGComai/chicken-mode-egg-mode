@@ -51,7 +51,7 @@ var slipping := false:
 				slipping_animation_multiplier = 2.0
 			else:
 				slipping_animation_multiplier = 1.0
-var running_animation := "eggrun-animation"
+var running_animation := "forkrun-animation"
 var mode_speed_multiplier := 1.0
 var nav_target_pos: Vector3
 var patrol_idx := 0
@@ -72,6 +72,8 @@ var player_position_known := false:
 				looking_for_player = true
 				print("found player")
 			else:
+				nav_target_pos = patrol_points[patrol_idx].global_position
+				navigation_agent_3d.target_position = nav_target_pos
 				print("lost player")
 var last_player_position: Vector3
 
@@ -111,7 +113,7 @@ func _physics_process(delta):
 			if collider.has_meta("player"):
 				search_timer.start()
 				player_position_known = true
-				last_player_position = player_cast.get_collision_point()
+				last_player_position = player_node.global_position#player_cast.get_collision_point()
 				nav_target_pos = last_player_position
 				navigation_agent_3d.target_position = last_player_position
 			else:
@@ -124,6 +126,7 @@ func _physics_process(delta):
 	
 	var sprint := 1.0
 	
+#region jump and fall
 	if not is_on_floor():
 		falling = true
 		falling_velocity = velocity.y
@@ -141,7 +144,9 @@ func _physics_process(delta):
 				#fall_damaged = true
 				#animation_player.current_animation = "splits"
 				#animation_player.speed_scale = 2.0
+#endregion
 	
+#region movement
 	var next_path_point: Vector3
 	if global.nav_baked:
 		next_path_point = navigation_agent_3d.get_next_path_position()
@@ -190,6 +195,7 @@ func _physics_process(delta):
 		velocity.z = lerp(velocity.z, 0.0, 0.3)
 		
 	move_and_slide()
+#endregion
 
 
 func _on_global_player_node_changed(value):

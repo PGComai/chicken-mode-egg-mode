@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://5mdtva3euv30"]
+
+[ext_resource type="Script" path="res://scripts/foot_poof.gd" id="1_84ptp"]
+
+[sub_resource type="Curve" id="Curve_w4qi4"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.166667, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2tgjp"]
+curve = SubResource("Curve_w4qi4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bje6b"]
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.13
+gravity = Vector3(0, 0.1, 0)
+scale_curve = SubResource("CurveTexture_2tgjp")
+
+[sub_resource type="SphereMesh" id="SphereMesh_1pgxh"]
+radius = 0.07
+height = 0.14
+
+[node name="FootPoofL" type="GPUParticles3D"]
+top_level = true
+emitting = false
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_bje6b")
+draw_pass_1 = SubResource("SphereMesh_1pgxh")
+script = ExtResource("1_84ptp")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

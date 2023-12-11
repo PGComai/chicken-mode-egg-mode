@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://c1frmlc7xgi4u"]
+[gd_scene load_steps=54 format=3 uid="uid://c1frmlc7xgi4u"]
 
 [ext_resource type="Script" path="res://scripts/ChaseCam.gd" id="1_ec0n0"]
 [ext_resource type="Material" uid="uid://cv5uuqh47444d" path="res://textures/cast_iron_material.tres" id="1_g75ek"]
@@ -18,21 +18,6 @@ geometry_parsed_geometry_type = 2
 geometry_source_geometry_mode = 1
 geometry_source_group_name = &"nav"
 agent_radius = 1.0
-
-[sub_resource type="Animation" id="Animation_6rl51"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(-6.22833, 6.41122, 4.78824)]
-}
 
 [sub_resource type="Animation" id="Animation_nutqc"]
 resource_name = "moving_platform_1"
@@ -87,7 +72,6 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1y6nv"]
 _data = {
-"RESET": SubResource("Animation_6rl51"),
 "moving_platform_1": SubResource("Animation_nutqc"),
 "moving_platform_2": SubResource("Animation_o5ji2"),
 "moving_platform_3": SubResource("Animation_d7vkq")
@@ -269,31 +253,6 @@ radius = 2.185
 section_length = 7.286
 curve = SubResource("Curve_y4mhi")
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qhpct"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_l358u"]
-size = Vector2(200, 200)
-
-[sub_resource type="Gradient" id="Gradient_jymg0"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0, 0.676471)
-colors = PackedColorArray(0.209908, 0.209908, 0.209908, 1, 0.775063, 0.775063, 0.775063, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ao0y5"]
-noise_type = 4
-frequency = 0.9576
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t17vk"]
-seamless = true
-seamless_blend_skirt = 0.005
-color_ramp = SubResource("Gradient_jymg0")
-noise = SubResource("FastNoiseLite_ao0y5")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w8eng"]
-albedo_color = Color(0.286275, 0.286275, 0.286275, 1)
-albedo_texture = SubResource("NoiseTexture2D_t17vk")
-uv1_scale = Vector3(20, 20, 20)
-
 [node name="World" type="Node3D"]
 
 [node name="Patrol Waypoints" type="Node3D" parent="."]
@@ -325,6 +284,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.965, 19.2219, -13.2601)
 [node name="Zone3Point3" type="Node3D" parent="Patrol Waypoints"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.965, 19.2219, 4.23994)
 
+[node name="Zone4Point1" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.9235, -0.985419, -0.142599)
+
+[node name="Zone4Point2" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.2904, -0.985421, -14.2244)
+
+[node name="Zone4Point3" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.156, -0.985421, -29.5782)
+
+[node name="Zone4Point4" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0332794, -0.985421, -36.9249)
+
+[node name="Zone4Point5" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.9337, -0.985421, -30.6513)
+
+[node name="Zone4Point6" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.4998, -0.985421, -19.2598)
+
+[node name="Zone4Point7" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.1956, -0.985421, 0.138859)
+
+[node name="Zone4Point8" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.0682, -0.985421, 15.4927)
+
+[node name="Zone4Point9" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2639, -0.985421, 29.2781)
+
+[node name="Zone4Point10" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.131798, -0.985421, 35.8819)
+
+[node name="Zone4Point11" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.9366, -0.985421, 31.1767)
+
+[node name="Zone4Point12" type="Node3D" parent="Patrol Waypoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.8046, -0.985421, 16.8134)
+
 [node name="Enemies" type="Node3D" parent="."]
 
 [node name="Fork1" parent="Enemies" node_paths=PackedStringArray("patrol_points") instance=ExtResource("10_e7j3f")]
@@ -339,6 +334,10 @@ patrol_points = [NodePath("../../Patrol Waypoints/Zone2Point1"), NodePath("../..
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.99812, 19.0522, -13.1825)
 patrol_points = [NodePath("../../Patrol Waypoints/Zone3Point1"), NodePath("../../Patrol Waypoints/Zone3Point2"), NodePath("../../Patrol Waypoints/Zone3Point3")]
 
+[node name="Fork4" parent="Enemies" node_paths=PackedStringArray("patrol_points") instance=ExtResource("10_e7j3f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.9847, -0.982882, 0.00217104)
+patrol_points = [NodePath("../../Patrol Waypoints/Zone4Point1"), NodePath("../../Patrol Waypoints/Zone4Point2"), NodePath("../../Patrol Waypoints/Zone4Point3"), NodePath("../../Patrol Waypoints/Zone4Point4"), NodePath("../../Patrol Waypoints/Zone4Point5"), NodePath("../../Patrol Waypoints/Zone4Point6"), NodePath("../../Patrol Waypoints/Zone4Point7"), NodePath("../../Patrol Waypoints/Zone4Point8"), NodePath("../../Patrol Waypoints/Zone4Point9"), NodePath("../../Patrol Waypoints/Zone4Point10"), NodePath("../../Patrol Waypoints/Zone4Point11"), NodePath("../../Patrol Waypoints/Zone4Point12")]
+
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_iqbed")
 script = ExtResource("1_y7t7o")
@@ -347,7 +346,7 @@ script = ExtResource("1_y7t7o")
 one_shot = true
 
 [node name="MovingPlatform3" type="AnimatableBody3D" parent="."]
-transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, -6.22833, 6.41122, 4.78824)
+transform = Transform3D(0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0, 1, -24.5358, 39.8765, 2.63688)
 
 [node name="MovingPlatform3Animation" type="AnimationPlayer" parent="MovingPlatform3"]
 libraries = {
@@ -449,7 +448,7 @@ mesh = SubResource("PrismMesh_v8x63")
 surface_material_override/0 = SubResource("StandardMaterial3D_bvhkr")
 
 [node name="MovingPlatform1" type="AnimatableBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.22833, 6.41122, 4.78824)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.49175, 6.41122, 13.2686)
 
 [node name="MovingPlatform1Animation" type="AnimationPlayer" parent="MovingPlatform1"]
 libraries = {
@@ -465,7 +464,7 @@ mesh = SubResource("BoxMesh_55bwc")
 surface_material_override/0 = ExtResource("2_u2wl0")
 
 [node name="MovingPlatform2" type="AnimatableBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.22833, 6.41122, 4.78824)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.22833, 6.41122, 5.30106)
 
 [node name="MovingPlatform2Animation" type="AnimationPlayer" parent="MovingPlatform2"]
 libraries = {
@@ -598,19 +597,6 @@ lifetime = 0.25
 visibility_aabb = AABB(-40, -40, -40, 80, 80, 80)
 process_material = SubResource("ParticleProcessMaterial_tbdut")
 draw_pass_1 = SubResource("TubeTrailMesh_0fbpw")
-
-[node name="Bedrock" type="StaticBody3D" parent="."]
-visible = false
-collision_layer = 3
-collision_mask = 3
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Bedrock"]
-shape = SubResource("WorldBoundaryShape3D_qhpct")
-disabled = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Bedrock"]
-mesh = SubResource("PlaneMesh_l358u")
-surface_material_override/0 = SubResource("StandardMaterial3D_w8eng")
 
 [node name="ChaseCam" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.81293, 10.717)

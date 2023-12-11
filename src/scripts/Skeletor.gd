@@ -5,6 +5,9 @@ extends Skeleton3D
 @export var head_height := 1.7
 @export var shoulder_height := 1.5
 @export var waist_height := 0.9
+@export var shoulder_length := 0.2
+@export var bicep_length := 0.3
+@export var forearm_length := 0.3
 @export var generate_bones := false:
 	set(value):
 		if value:
@@ -51,17 +54,17 @@ func _generate_bones():
 	bone_names.append("Head")
 	
 	add_bone("ShoulderL")
-	set_bone_rest(4, Transform3D(forward_basis, Vector3(-0.2, 0.0, 0.0)))
+	set_bone_rest(4, Transform3D(forward_basis, Vector3(-shoulder_length, 0.0, 0.0)))
 	set_bone_parent(4, 1)
 	bone_names.append("ShoulderL")
 	
 	add_bone("BicepL")
-	set_bone_rest(5, Transform3D(forward_basis, Vector3(-0.3, 0.0, 0.0)))
+	set_bone_rest(5, Transform3D(forward_basis, Vector3(-bicep_length, 0.0, 0.0)))
 	set_bone_parent(5, 4)
 	bone_names.append("BicepL")
 	
 	add_bone("ForeArmL")
-	set_bone_rest(6, Transform3D(forward_basis, Vector3(-0.3, 0.0, 0.0)))
+	set_bone_rest(6, Transform3D(forward_basis, Vector3(-forearm_length, 0.0, 0.0)))
 	set_bone_parent(6, 5)
 	bone_names.append("ForeArmL")
 	
@@ -71,17 +74,17 @@ func _generate_bones():
 	bone_names.append("HandL")
 	
 	add_bone("ShoulderR")
-	set_bone_rest(8, Transform3D(forward_basis, Vector3(0.2, 0.0, 0.0)))
+	set_bone_rest(8, Transform3D(forward_basis, Vector3(shoulder_length, 0.0, 0.0)))
 	set_bone_parent(8, 1)
 	bone_names.append("ShoulderR")
 	
 	add_bone("BicepR")
-	set_bone_rest(9, Transform3D(forward_basis, Vector3(0.3, 0.0, 0.0)))
+	set_bone_rest(9, Transform3D(forward_basis, Vector3(bicep_length, 0.0, 0.0)))
 	set_bone_parent(9, 8)
 	bone_names.append("BicepR")
 	
 	add_bone("ForeArmR")
-	set_bone_rest(10, Transform3D(forward_basis, Vector3(0.3, 0.0, 0.0)))
+	set_bone_rest(10, Transform3D(forward_basis, Vector3(forearm_length, 0.0, 0.0)))
 	set_bone_parent(10, 9)
 	bone_names.append("ForeArmR")
 	

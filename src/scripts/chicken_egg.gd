@@ -55,6 +55,8 @@ var slipping := false:
 				slipping_animation_multiplier = 1.0
 var running_animation := "eggrun"
 var mode_speed_multiplier := 1.0
+var mode_fall_multiplier := 1.0
+var attacking := false
 
 @onready var cam_hinge_h = $CamHingeH
 @onready var cam_hinge_v = $CamHingeH/CamHingeV
@@ -70,6 +72,10 @@ var mode_speed_multiplier := 1.0
 @onready var neck_mesh = $Skeleton3D/Neck/NeckMesh
 @onready var head_mesh = $Skeleton3D/Head/HeadMesh
 @onready var beak_mesh = $Skeleton3D/Head/BeakMesh
+@onready var wing_1_l = $Skeleton3D/BicepL/Wing1
+@onready var wing_2_l = $Skeleton3D/ForeArmL/Wing2
+@onready var wing_1_r = $Skeleton3D/BicepR/Wing1
+@onready var wing_2_r = $Skeleton3D/ForeArmR/Wing2
 
 
 func _ready():
@@ -77,6 +83,14 @@ func _ready():
 	global.player_node = self
 	global.cam_x_form_node = cam_x_form
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if egg_mode:
+		neck_mesh.visible = false
+		head_mesh.visible = false
+		beak_mesh.visible = false
+		wing_1_l.visible = false
+		wing_1_r.visible = false
+		wing_2_l.visible = false
+		wing_2_r.visible = false
 
 
 func _unhandled_input(event):
@@ -106,7 +120,7 @@ func _physics_process(delta):
 		steaming = false
 		falling = true
 		falling_velocity = velocity.y
-		velocity.y -= gravity * delta
+		velocity.y -= gravity * delta * mode_fall_multiplier
 	else:
 		if hot_cast.is_colliding():
 			steaming = true
@@ -125,6 +139,8 @@ func _physics_process(delta):
 				animation_player.speed_scale = 2.0
 	
 	if not fall_damaged:
+		if Input.is_action_just_pressed("attack") and not attacking and not egg_mode:
+			attacking = true
 		if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y = JUMP_VELOCITY
 		
@@ -146,7 +162,7 @@ func _physics_process(delta):
 		
 		var direction : Vector3 = (cam_hinge_h.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
-		if direction and not falling:
+		if direction and not falling and not attacking:
 			velocity.x = lerp(velocity.x, direction.x * SPEED * sprint * mode_speed_multiplier, 0.1)
 			velocity.z = lerp(velocity.z, direction.z * SPEED * sprint * mode_speed_multiplier, 0.1)
 			animation_player.current_animation = running_animation
@@ -155,13 +171,23 @@ func _physics_process(delta):
 		elif falling:
 			velocity.x = lerp(velocity.x, direction.x * SPEED * sprint * mode_speed_multiplier, 0.01)
 			velocity.z = lerp(velocity.z, direction.z * SPEED * sprint * mode_speed_multiplier, 0.01)
-			if left_foot_back:
-				animation_player.current_animation = "eggmidairL"
+			if egg_mode:
+				if left_foot_back:
+					animation_player.current_animation = "eggmidairL"
+				else:
+					animation_player.current_animation = "eggmidairR"
 			else:
-				animation_player.current_animation = "eggmidairR"
+				animation_player.current_animation = "chickenjump"
 			if not stopped:
 				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.01)
 			animation_player.speed_scale = 4.0
+		elif attacking:
+			body_face_angle = cam_hinge_h.transform.basis.z.signed_angle_to(Vector3.BACK, Vector3.UP)
+			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
+			velocity.x = lerp(velocity.x, 0.0, 0.3)
+			velocity.z = lerp(velocity.z, 0.0, 0.3)
+			animation_player.current_animation = "chickengust"
+			animation_player.speed_scale = 3.0
 		else:
 			velocity.x = lerp(velocity.x, 0.0, 0.3)
 			velocity.z = lerp(velocity.z, 0.0, 0.3)
@@ -175,14 +201,24 @@ func _mode_switch():
 		neck_mesh.visible = false
 		head_mesh.visible = false
 		beak_mesh.visible = false
+		wing_1_l.visible = false
+		wing_1_r.visible = false
+		wing_2_l.visible = false
+		wing_2_r.visible = false
 		running_animation = "eggrun"
 		mode_speed_multiplier = 1.0
+		mode_fall_multiplier = 1.0
 	else:
 		neck_mesh.visible = true
 		head_mesh.visible = true
 		beak_mesh.visible = true
+		wing_1_l.visible = true
+		wing_1_r.visible = true
+		wing_2_l.visible = true
+		wing_2_r.visible = true
 		running_animation = "chickenrun"
 		mode_speed_multiplier = 1.8
+		mode_fall_multiplier = 0.5
 
 
 func _steaming_effect():
@@ -205,3 +241,5 @@ func _eggshell_effect():
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "splits":
 		fall_damaged = false
+	elif anim_name == "chickengust":
+		attacking = false
