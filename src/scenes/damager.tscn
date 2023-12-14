@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://uai7y07tt7p7"]
+
+[ext_resource type="Script" path="res://scripts/damager.gd" id="1_7xlmd"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iin8u"]
+size = Vector3(0.4, 0.5, 0.2)
+
+[node name="ForkDamager" type="Area3D"]
+collision_mask = 2
+script = ExtResource("1_7xlmd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_iin8u")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
