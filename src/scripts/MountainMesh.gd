@@ -65,7 +65,8 @@ func _generate_mountain():
 			if flat_cliff_curve:
 				flatness = flat_cliff_curve.sample_baked(flatness)
 			
-			var clr = cliff_color.lerp(flat_ground_color, flatness)
+			var fgc = flat_ground_color.lerp(Color("white"), clamp(remap(snapped(v1.y, 5.0), 0.0, 200.0, 0.0, 1.0), 0.0, 1.0))
+			var clr = cliff_color.lerp(fgc, flatness)
 			
 			color_array.append(clr)
 			color_array.append(clr)
@@ -87,7 +88,7 @@ func _generate_mountain():
 			if flat_cliff_curve:
 				flatness = flat_cliff_curve.sample_baked(flatness)
 			
-			clr = cliff_color.lerp(flat_ground_color, flatness)
+			clr = cliff_color.lerp(fgc, flatness)
 			
 			color_array.append(clr)
 			color_array.append(clr)

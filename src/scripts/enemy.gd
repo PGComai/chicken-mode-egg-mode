@@ -117,34 +117,36 @@ func _ready():
 
 
 func _process(delta):
-	foot_step_l.pitch_scale = randfn(1.0, 0.02)
-	foot_step_r.pitch_scale = randfn(1.0, 0.02)
-	
-	if not nav_target_pos and can_nav:
-		nav_target_pos = patrol_zone.get_children()[0].global_position
-		navigation_agent_3d.target_position = nav_target_pos
-		print("picked target")
-	
-	if navigation_agent_3d.distance_to_target() < TARGET_THRESH or navigation_agent_3d.get_next_path_position().distance_squared_to(global_position) < PATH_THRESH:
-		waypoint_stuck_counter += delta
-		if waypoint_stuck_counter > STUCK_THRESH:
-			print("stuck")
-			waypoint_stuck_counter = 0.0
-			patrol_idx += 1
-			if patrol_idx >= patrol_zone.get_children().size():
-				patrol_idx = 0
-			nav_target_pos = patrol_zone.get_children()[patrol_idx].global_position
+	if player_node.global_position.distance_squared_to(global_position) > 1200.0 and not player_position_known:
+		pass
+	else:
+		foot_step_l.pitch_scale = randfn(1.0, 0.02)
+		foot_step_r.pitch_scale = randfn(1.0, 0.02)
+		
+		if not nav_target_pos and can_nav:
+			nav_target_pos = patrol_zone.get_children()[0].global_position
 			navigation_agent_3d.target_position = nav_target_pos
-			charging = false
+			print("picked target")
+		
+		if navigation_agent_3d.distance_to_target() < TARGET_THRESH or navigation_agent_3d.get_next_path_position().distance_squared_to(global_position) < PATH_THRESH:
+			waypoint_stuck_counter += delta
+			if waypoint_stuck_counter > STUCK_THRESH:
+				print("stuck")
+				waypoint_stuck_counter = 0.0
+				patrol_idx += 1
+				if patrol_idx >= patrol_zone.get_children().size():
+					patrol_idx = 0
+				nav_target_pos = patrol_zone.get_children()[patrol_idx].global_position
+				navigation_agent_3d.target_position = nav_target_pos
+				charging = false
 
 
 func _physics_process(delta):
-	
-#region player detection
-	if player_node and not stop_and_look:
-		if player_node.global_position.distance_squared_to(global_position) > 400.0 and not player_position_known:
-			pass
-		else:
+	if player_node.global_position.distance_squared_to(global_position) > 1200.0 and not player_position_known:
+		pass
+	else:
+	#region player detection
+		if player_node and not stop_and_look:
 			var cast_target = to_local(player_node.global_position - Vector3(0.0, 0.2, 0.0)).normalized()
 			if looking_for_player:
 				cast_target = cast_target * ACTIVE_RANGE
@@ -171,112 +173,112 @@ func _physics_process(delta):
 			else:
 				if not looking_for_player:
 					player_position_known = false
-#endregion
-	
-#region jump and fall
-	if not is_on_floor():
-		falling = true
-		falling_velocity = velocity.y
-		velocity.y -= gravity * delta
-	else:
-		if jump_cast.is_colliding():
-			velocity.y = JUMP_VELOCITY
-		if slippery_cast.is_colliding():
-			slipping = true
+	#endregion
+		
+	#region jump and fall
+		if not is_on_floor():
+			falling = true
+			falling_velocity = velocity.y
+			velocity.y -= gravity * delta
 		else:
-			slipping = false
-		if falling:
-			falling = false
-			#if falling_velocity <= FALL_DAMAGE_VELOCITY:
-				#fall_damaged = true
-				#animation_player.current_animation = "splits"
-				#animation_player.speed_scale = 2.0
-#endregion
-	
-#region movement
-	var next_path_point: Vector3
-	if global.nav_baked:
-		next_path_point = navigation_agent_3d.get_next_path_position()
-	else:
-		next_path_point = global_position
-	
-	var input_vec3 := Vector3(next_path_point - global_position)
-	var input_dir := Vector2(input_vec3.x, input_vec3.z)
-	var input_strength := input_dir.length()
-	
-	if input_dir.is_equal_approx(Vector2.ZERO) and not stopped:
-		stopped = true
-	elif not input_dir.is_equal_approx(Vector2.ZERO) and stopped:
-		stopped = false
-	
-	var direction : Vector3 = Vector3(input_dir.x, 0.0, input_dir.y).normalized()
-	var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
-	
-	
-	if preparing_to_charge or charging or charge_connected:
-		tall_collision.disabled = true
-		short_collision.disabled = false
-	else:
-		short_collision.disabled = true
-		tall_collision.disabled = false
-	
-	if death_queued:
-		velocity.x = lerp(velocity.x, 0.0, 0.3)
-		velocity.z = lerp(velocity.z, 0.0, 0.3)
-		animation_player.current_animation = "death"
-	elif knockback:
-		print("knockback")
-		velocity = knockback_direction * knockback_strength
-		knockback = false
-	elif damaged:
-		velocity.x = lerp(velocity.x, 0.0, 0.1)
-		velocity.z = lerp(velocity.z, 0.0, 0.1)
-		animation_player.current_animation = "damaged"
-		animation_player.speed_scale = 1.0
-	elif stop_and_look:
-		velocity.x = lerp(velocity.x, 0.0, 0.3)
-		velocity.z = lerp(velocity.z, 0.0, 0.3)
-		rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
-		animation_player.current_animation = "alerted"
-		animation_player.speed_scale = 1.0
-	elif charge_connected:
-		velocity.x = lerp(velocity.x, 0.0, 0.3)
-		velocity.z = lerp(velocity.z, 0.0, 0.3)
-		animation_player.current_animation = "charge-impact"
-		animation_player.speed_scale = 1.0
-	elif preparing_to_charge:
-		velocity.x = lerp(velocity.x, 0.0, 0.3)
-		velocity.z = lerp(velocity.z, 0.0, 0.3)
-		rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
-		animation_player.current_animation = "prepare_charge"
-		animation_player.speed_scale = 1.0
-	elif charging:
-		velocity.x = lerp(velocity.x, direction.x * SPEED * CHARGE_MULTI, 0.05)
-		velocity.z = lerp(velocity.z, direction.z * SPEED * CHARGE_MULTI, 0.05)
-		animation_player.current_animation = "forkcharge-animation"
-		rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
-		var goofy_run = remap(velocity.length(), 0.0, SPEED * CHARGE_MULTI, 0.0, 1.0)
-		goofy_run = clamp(goofy_run, 0.0, 1.0)
-		goofy_run = 1.0 - goofy_run
-		goofy_run += 1.0
-		animation_player.speed_scale = CHARGE_MULTI * RUN_SPEED * slipping_animation_multiplier * goofy_run
-	elif direction:
-		velocity.x = lerp(velocity.x, direction.x * SPEED, 0.1)
-		velocity.z = lerp(velocity.z, direction.z * SPEED, 0.1)
-		animation_player.current_animation = running_animation
-		rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
-		animation_player.speed_scale = RUN_SPEED * slipping_animation_multiplier
-	elif falling:
-		velocity.x = lerp(velocity.x, direction.x * SPEED, 0.01)
-		velocity.z = lerp(velocity.z, direction.z * SPEED, 0.01)
-		if not stopped:
-			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.01)
-		animation_player.speed_scale = 4.0
-	else:
-		velocity.x = lerp(velocity.x, 0.0, 0.3)
-		velocity.z = lerp(velocity.z, 0.0, 0.3)
-	move_and_slide()
-#endregion
+			if jump_cast.is_colliding():
+				velocity.y = JUMP_VELOCITY
+			if slippery_cast.is_colliding():
+				slipping = true
+			else:
+				slipping = false
+			if falling:
+				falling = false
+				#if falling_velocity <= FALL_DAMAGE_VELOCITY:
+					#fall_damaged = true
+					#animation_player.current_animation = "splits"
+					#animation_player.speed_scale = 2.0
+	#endregion
+		
+	#region movement
+		var next_path_point: Vector3
+		if global.nav_baked:
+			next_path_point = navigation_agent_3d.get_next_path_position()
+		else:
+			next_path_point = global_position
+		
+		var input_vec3 := Vector3(next_path_point - global_position)
+		var input_dir := Vector2(input_vec3.x, input_vec3.z)
+		var input_strength := input_dir.length()
+		
+		if input_dir.is_equal_approx(Vector2.ZERO) and not stopped:
+			stopped = true
+		elif not input_dir.is_equal_approx(Vector2.ZERO) and stopped:
+			stopped = false
+		
+		var direction : Vector3 = Vector3(input_dir.x, 0.0, input_dir.y).normalized()
+		var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+		
+		
+		if preparing_to_charge or charging or charge_connected:
+			tall_collision.disabled = true
+			short_collision.disabled = false
+		else:
+			short_collision.disabled = true
+			tall_collision.disabled = false
+		
+		if death_queued:
+			velocity.x = lerp(velocity.x, 0.0, 0.3)
+			velocity.z = lerp(velocity.z, 0.0, 0.3)
+			animation_player.current_animation = "death"
+		elif knockback:
+			print("knockback")
+			velocity = knockback_direction * knockback_strength
+			knockback = false
+		elif damaged:
+			velocity.x = lerp(velocity.x, 0.0, 0.1)
+			velocity.z = lerp(velocity.z, 0.0, 0.1)
+			animation_player.current_animation = "damaged"
+			animation_player.speed_scale = 1.0
+		elif stop_and_look:
+			velocity.x = lerp(velocity.x, 0.0, 0.3)
+			velocity.z = lerp(velocity.z, 0.0, 0.3)
+			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
+			animation_player.current_animation = "alerted"
+			animation_player.speed_scale = 1.0
+		elif charge_connected:
+			velocity.x = lerp(velocity.x, 0.0, 0.3)
+			velocity.z = lerp(velocity.z, 0.0, 0.3)
+			animation_player.current_animation = "charge-impact"
+			animation_player.speed_scale = 1.0
+		elif preparing_to_charge:
+			velocity.x = lerp(velocity.x, 0.0, 0.3)
+			velocity.z = lerp(velocity.z, 0.0, 0.3)
+			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
+			animation_player.current_animation = "prepare_charge"
+			animation_player.speed_scale = 1.0
+		elif charging:
+			velocity.x = lerp(velocity.x, direction.x * SPEED * CHARGE_MULTI, 0.05)
+			velocity.z = lerp(velocity.z, direction.z * SPEED * CHARGE_MULTI, 0.05)
+			animation_player.current_animation = "forkcharge-animation"
+			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
+			var goofy_run = remap(velocity.length(), 0.0, SPEED * CHARGE_MULTI, 0.0, 1.0)
+			goofy_run = clamp(goofy_run, 0.0, 1.0)
+			goofy_run = 1.0 - goofy_run
+			goofy_run += 1.0
+			animation_player.speed_scale = CHARGE_MULTI * RUN_SPEED * slipping_animation_multiplier * goofy_run
+		elif direction:
+			velocity.x = lerp(velocity.x, direction.x * SPEED, 0.1)
+			velocity.z = lerp(velocity.z, direction.z * SPEED, 0.1)
+			animation_player.current_animation = running_animation
+			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
+			animation_player.speed_scale = RUN_SPEED * slipping_animation_multiplier
+		elif falling:
+			velocity.x = lerp(velocity.x, direction.x * SPEED, 0.01)
+			velocity.z = lerp(velocity.z, direction.z * SPEED, 0.01)
+			if not stopped:
+				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.01)
+			animation_player.speed_scale = 4.0
+		else:
+			velocity.x = lerp(velocity.x, 0.0, 0.3)
+			velocity.z = lerp(velocity.z, 0.0, 0.3)
+		move_and_slide()
+	#endregion
 
 
 func _on_global_player_node_changed(value):
