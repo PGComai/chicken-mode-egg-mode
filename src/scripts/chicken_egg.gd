@@ -198,10 +198,10 @@ func _ready():
 		wing_2_r.visible = false
 
 
-func _unhandled_input(event):
-	if event is InputEventMouseMotion and not not_in_control:
-		rot_h -= event.relative.x * SENSITIVITY
-		rot_v -= event.relative.y * SENSITIVITY
+#func _input(event):
+	#if event is InputEventMouseMotion and not not_in_control:
+		#rot_h -= event.relative.x * SENSITIVITY
+		#rot_v -= event.relative.y * SENSITIVITY
 
 
 func _process(delta):
@@ -544,3 +544,9 @@ func _on_hat_unlocker_body_entered(body):
 		question_mark_hat.visible = false
 		new_hat = true
 		emit_signal("ui_msg", "New Hat Unlocked!")
+
+
+func _on_ui_gui_input(event):
+	if event is InputEventMouseMotion and not not_in_control:
+		rot_h -= event.relative.x * SENSITIVITY
+		rot_v -= event.relative.y * SENSITIVITY

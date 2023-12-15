@@ -138,10 +138,10 @@ func _ready():
 		player_node_queued = false
 
 
-func _unhandled_input(event):
-	if event is InputEventMouseMotion and player_in_control:
-		rot_h -= event.relative.x * SENSITIVITY
-		rot_v -= event.relative.y * SENSITIVITY
+#func _input(event):
+	#if event is InputEventMouseMotion and player_in_control:
+		#rot_h -= event.relative.x * SENSITIVITY
+		#rot_v -= event.relative.y * SENSITIVITY
 
 
 func _process(delta):
@@ -422,3 +422,9 @@ func _on_bounce_timer_timeout():
 
 func _on_control_timer_timeout():
 	in_pot_area.monitoring = true
+
+
+func _on_ui_gui_input(event):
+	if event is InputEventMouseMotion and player_in_control:
+		rot_h -= event.relative.x * SENSITIVITY
+		rot_v -= event.relative.y * SENSITIVITY

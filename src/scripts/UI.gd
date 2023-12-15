@@ -11,7 +11,6 @@ const WIN_OPTIONS = [DisplayServer.WINDOW_MODE_WINDOWED,
 
 @onready var msg_fade = $MsgFade
 @onready var msg = $Msg
-@onready var world = $".."
 @onready var color_rect = $ColorRect
 @onready var pause_menu = $PauseMenu
 @onready var window_option = $PauseMenu/MenuVBox/WindowOption
@@ -19,6 +18,8 @@ const WIN_OPTIONS = [DisplayServer.WINDOW_MODE_WINDOWED,
 @onready var confirm_display_timer = $ConfirmDisplayTimer
 @onready var confirm_display = $PauseMenu/MenuVBox/ConfirmDisplay
 @onready var confirm_label = $PauseMenu/MenuVBox/ConfirmLabel
+@onready var texture_rect = $TextureRect
+@onready var sub_viewport = $"../SubViewport"
 
 
 var old_window_mode: DisplayServer.WindowMode
@@ -62,10 +63,8 @@ func _on_apply_display_button_up():
 	print(selected_res)
 	print(selected_win)
 	DisplayServer.window_set_mode(selected_win)
+	sub_viewport.size = selected_res
 	DisplayServer.window_set_size(selected_res)
-	#ProjectSettings.set_setting("display/window/size/mode", selected_win)
-	#ProjectSettings.set_setting("display/window/size/viewport_width", selected_res.x)
-	#ProjectSettings.set_setting("display/window/size/viewport_height", selected_res.y)
 	confirm_display.visible = true
 	confirm_display_timer.start()
 	counting_down = true
@@ -94,6 +93,7 @@ func _on_confirm_display_button_up():
 func _on_confirm_display_timer_timeout():
 	if not display_settings_confirmed:
 		DisplayServer.window_set_mode(old_window_mode)
+		sub_viewport.size = old_res
 		DisplayServer.window_set_size(old_res)
 		confirm_display.visible = false
 		confirm_label.visible = false
