@@ -8,6 +8,8 @@ extends Skeleton3D
 @export var shoulder_length := 0.2
 @export var bicep_length := 0.3
 @export var forearm_length := 0.3
+@export var hip_diameter := 0.2
+@export var leg_length := 4.5
 @export var generate_bones := false:
 	set(value):
 		if value:
@@ -94,17 +96,17 @@ func _generate_bones():
 	bone_names.append("HandR")
 	
 	add_bone("HipL")
-	set_bone_rest(12, Transform3D(forward_basis, Vector3(-0.2, 0.0, 0.0)))
+	set_bone_rest(12, Transform3D(forward_basis, Vector3(-hip_diameter, 0.0, 0.0)))
 	set_bone_parent(12, 0)
 	bone_names.append("HipL")
 	
 	add_bone("ThighL")
-	set_bone_rest(13, Transform3D(forward_basis, Vector3(0.0, -0.45, 0.0)))
+	set_bone_rest(13, Transform3D(forward_basis, Vector3(0.0, -(leg_length / 2.0), 0.0)))
 	set_bone_parent(13, 12)
 	bone_names.append("ThighL")
 	
 	add_bone("ShinL")
-	set_bone_rest(14, Transform3D(forward_basis, Vector3(0.0, -0.45, 0.0)))
+	set_bone_rest(14, Transform3D(forward_basis, Vector3(0.0, -(leg_length / 2.0), 0.0)))
 	set_bone_parent(14, 13)
 	bone_names.append("ShinL")
 	
@@ -114,17 +116,17 @@ func _generate_bones():
 	bone_names.append("FootL")
 	
 	add_bone("HipR")
-	set_bone_rest(16, Transform3D(forward_basis, Vector3(0.2, 0.0, 0.0)))
+	set_bone_rest(16, Transform3D(forward_basis, Vector3(hip_diameter, 0.0, 0.0)))
 	set_bone_parent(16, 0)
 	bone_names.append("HipR")
 	
 	add_bone("ThighR")
-	set_bone_rest(17, Transform3D(forward_basis, Vector3(0.0, -0.45, 0.0)))
+	set_bone_rest(17, Transform3D(forward_basis, Vector3(0.0, -(leg_length / 2.0), 0.0)))
 	set_bone_parent(17, 16)
 	bone_names.append("ThighR")
 	
 	add_bone("ShinR")
-	set_bone_rest(18, Transform3D(forward_basis, Vector3(0.0, -0.45, 0.0)))
+	set_bone_rest(18, Transform3D(forward_basis, Vector3(0.0, -(leg_length / 2.0), 0.0)))
 	set_bone_parent(18, 17)
 	bone_names.append("ShinR")
 	

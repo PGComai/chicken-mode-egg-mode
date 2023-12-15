@@ -17,6 +17,7 @@ const CHARGE_MULTI = 4.0
 const STUCK_THRESH = 1.0
 const TARGET_THRESH = 1.5
 const PATH_THRESH = 2.0
+const ACTIVITY_RANGE = 15000.0
 
 @export var left_foot_back := false
 @export var patrol_points: Array[Node3D]
@@ -108,6 +109,7 @@ var knockback_strength := 1.0
 
 
 func _ready():
+	spawn_pos = global_position
 	patrol_idx = patrol_offset
 	global = get_node("/root/Global")
 	global.player_node_changed.connect(_on_global_player_node_changed)
@@ -117,7 +119,7 @@ func _ready():
 
 
 func _process(delta):
-	if player_node.global_position.distance_squared_to(global_position) > 1200.0 and not player_position_known:
+	if player_node.global_position.distance_squared_to(global_position) > ACTIVITY_RANGE and not player_position_known:
 		pass
 	else:
 		foot_step_l.pitch_scale = randfn(1.0, 0.02)
@@ -142,7 +144,7 @@ func _process(delta):
 
 
 func _physics_process(delta):
-	if player_node.global_position.distance_squared_to(global_position) > 1200.0 and not player_position_known:
+	if player_node.global_position.distance_squared_to(global_position) > ACTIVITY_RANGE and not player_position_known:
 		pass
 	else:
 	#region player detection

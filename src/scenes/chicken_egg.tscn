@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://c3615mg6hyw76"]
+[gd_scene load_steps=80 format=3 uid="uid://c3615mg6hyw76"]
 
 [ext_resource type="Script" path="res://scripts/chicken_egg.gd" id="1_4cn5f"]
 [ext_resource type="Script" path="res://scripts/Skeletor.gd" id="1_ax3js"]
@@ -9,8 +9,10 @@
 [ext_resource type="Material" uid="uid://dfifd0koa1foh" path="res://textures/foot_material.tres" id="6_4u4i3"]
 [ext_resource type="AudioStream" uid="uid://camrou1447qod" path="res://audio/egg-crack.ogg" id="6_y3b7f"]
 [ext_resource type="AudioStream" uid="uid://uyo70etg3qi2" path="res://audio/baby-pop.ogg" id="7_qkjgk"]
+[ext_resource type="Material" uid="uid://brvpqhldr6qtw" path="res://textures/hat_material.tres" id="8_862wa"]
 [ext_resource type="Script" path="res://scripts/FootL.gd" id="8_fqnfv"]
 [ext_resource type="Shader" uid="uid://cvo7vvh24dqsf" path="res://textures/steam.tres" id="8_wsrc0"]
+[ext_resource type="Script" path="res://scripts/ShadowCast.gd" id="13_bc4hy"]
 
 [sub_resource type="Gradient" id="Gradient_ubdpg"]
 colors = PackedColorArray(1, 1, 1, 0.105882, 1, 1, 1, 0)
@@ -1743,6 +1745,16 @@ color_ramp = SubResource("GradientTexture1D_bxeic")
 
 [sub_resource type="PointMesh" id="PointMesh_p5d11"]
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_p8htd"]
+material = ExtResource("8_862wa")
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_x0qxf"]
+material = ExtResource("8_862wa")
+height = 0.05
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_dby8l"]
 top_radius = 0.02
 bottom_radius = 0.02
@@ -1754,6 +1766,29 @@ height = 0.08
 
 [sub_resource type="BoxMesh" id="BoxMesh_ggsow"]
 size = Vector3(0.1, 0.02, 0.3)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ti7es"]
+noise_type = 2
+frequency = 0.4875
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xjr3t"]
+width = 128
+height = 128
+seamless = true
+as_normal_map = true
+bump_strength = 3.0
+noise = SubResource("FastNoiseLite_ti7es")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aguxa"]
+diffuse_mode = 3
+albedo_color = Color(0.0705882, 0.0705882, 0.0705882, 1)
+roughness = 0.24
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_xjr3t")
+
+[sub_resource type="BoxMesh" id="BoxMesh_x26h2"]
+material = SubResource("StandardMaterial3D_aguxa")
+size = Vector3(0.2, 0.1, 0.4)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_bervu"]
 top_radius = 0.1
@@ -1783,10 +1818,20 @@ size = Vector3(0.5, 0.5, 0.05)
 [sub_resource type="BoxMesh" id="BoxMesh_naiq7"]
 size = Vector3(0.5, 0.3, 0.05)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v2op1"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.0941176, 0.0941176, 0.0941176, 0.431373)
+
+[sub_resource type="SphereMesh" id="SphereMesh_uckas"]
+material = SubResource("StandardMaterial3D_v2op1")
+radius = 0.25
+height = 0.03
+
 [node name="ChickenEgg" type="CharacterBody3D" groups=["damageable", "heavy", "knockbackable", "player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0167495, 0)
 collision_layer = 2
-collision_mask = 3
+collision_mask = 131
 floor_snap_length = 0.32
 script = ExtResource("1_4cn5f")
 damaged = true
@@ -1991,6 +2036,8 @@ shoulder_height = 0.3
 shoulder_length = 0.5
 bicep_length = 0.5
 forearm_length = 0.5
+hip_diameter = null
+leg_length = null
 
 [node name="Egg" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -2005,6 +2052,7 @@ surface_material_override/0 = ExtResource("4_isp0r")
 [node name="Steam" type="GPUParticles3D" parent="Skeleton3D/Egg/EggMesh"]
 material_override = SubResource("ShaderMaterial_3chn6")
 cast_shadow = 0
+emitting = false
 amount = 128
 lifetime = 2.0
 fixed_fps = 15
@@ -2027,6 +2075,17 @@ draw_pass_1 = SubResource("PointMesh_p5d11")
 stream = ExtResource("6_y3b7f")
 unit_size = 2.25
 max_distance = 100.0
+
+[node name="EggHat" type="Node3D" parent="Skeleton3D/Egg/EggMesh"]
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/Egg/EggMesh/EggHat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_p8htd")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Skeleton3D/Egg/EggMesh/EggHat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.431114, 0)
+mesh = SubResource("CylinderMesh_x0qxf")
 
 [node name="ThighL" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.9, 0)
@@ -2096,6 +2155,11 @@ stream = ExtResource("7_qkjgk")
 unit_size = 2.25
 max_distance = 100.0
 
+[node name="FancyBoot" type="MeshInstance3D" parent="Skeleton3D/FootL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0374494, -0.0705955)
+visible = false
+mesh = SubResource("BoxMesh_x26h2")
+
 [node name="FootR" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, 0)
 bone_name = "ShinR"
@@ -2112,6 +2176,12 @@ surface_material_override/0 = ExtResource("6_4u4i3")
 stream = ExtResource("7_qkjgk")
 unit_size = 2.25
 max_distance = 100.0
+
+[node name="FancyBoot2" type="MeshInstance3D" parent="Skeleton3D/FootR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.037, -0.071)
+visible = false
+mesh = SubResource("BoxMesh_x26h2")
+skeleton = NodePath("../../FootL")
 
 [node name="Neck" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866026, 0, -0.866026, 0.5, 0, 1.2, 0)
@@ -2138,6 +2208,18 @@ mesh = SubResource("SphereMesh_yen1r")
 [node name="EyeL" type="MeshInstance3D" parent="Skeleton3D/Head/HeadMesh"]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.174, 0.041, 0.0649999)
 mesh = SubResource("SphereMesh_yen1r")
+
+[node name="HeadHat" type="Node3D" parent="Skeleton3D/Head/HeadMesh"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.19209e-07, 0.181622)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/Head/HeadMesh/HeadHat"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_p8htd")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Skeleton3D/Head/HeadMesh/HeadHat"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_x0qxf")
 
 [node name="BeakMesh" type="MeshInstance3D" parent="Skeleton3D/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.96046e-08, 0.390539, -0.0140542)
@@ -2219,7 +2301,43 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 wait_time = 2.0
 one_shot = true
 
+[node name="CrackHealTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
+[node name="ShoeLook" type="Node3D" parent="."]
+transform = Transform3D(-1, -1.85551e-08, 8.5431e-08, 0, 0.977216, 0.212246, -8.74228e-08, 0.212246, -0.977216, 0, 0.3, -1.2)
+
+[node name="NewShoesTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="DefeatGanon" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+autostart = true
+
+[node name="HatLook" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.8, -2)
+
+[node name="ShadowCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+target_position = Vector3(0, -30, 0)
+script = ExtResource("13_bc4hy")
+slope_color = Color(0.282353, 0.0666667, 0.105882, 0.45098)
+flat_color = Color(0.0784314, 0.0784314, 0.0784314, 0.447059)
+
+[node name="Node3D" type="Node3D" parent="ShadowCast"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ShadowCast/Node3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("SphereMesh_uckas")
+
 [connection signal="body_entered" from="RollBody" to="." method="_on_roll_body_body_entered"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="BounceTimer" to="." method="_on_bounce_timer_timeout"]
 [connection signal="timeout" from="GustTimer" to="." method="_on_gust_timer_timeout"]
+[connection signal="timeout" from="CrackHealTimer" to="." method="_on_crack_heal_timer_timeout"]
+[connection signal="timeout" from="NewShoesTimer" to="." method="_on_new_shoes_timer_timeout"]
+[connection signal="timeout" from="DefeatGanon" to="." method="_on_defeat_ganon_timeout"]

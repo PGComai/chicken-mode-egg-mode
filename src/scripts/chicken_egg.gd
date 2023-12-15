@@ -1,6 +1,10 @@
 extends CharacterBody3D
 
 signal sprinting(value)
+signal newshoes(value)
+signal newhat(value)
+signal ui_msg(message)
+signal camera_shake(zero_to_one)
 
 const SPEED = 10.0
 const JUMP_VELOCITY = 7.0
@@ -51,11 +55,26 @@ const ROLL_KNOCKBACK_STRENGTH = 10.0
 @onready var roll_dust_launch = $RollDustLaunch
 @onready var roll_dust = $RollDust
 @onready var roll_boom = $RollBoom
+@onready var before_roller = $"../Player Spawns/Before Roller"
+@onready var start = $"../Player Spawns/Start"
+@onready var before_stairs = $"../Player Spawns/Before Stairs"
+@onready var crack_heal_timer = $CrackHealTimer
+@onready var shoe_look = $ShoeLook
+@onready var new_shoes_timer = $NewShoesTimer
+@onready var fancy_boot = $Skeleton3D/FootL/FancyBoot
+@onready var fancy_boot_2 = $Skeleton3D/FootR/FancyBoot2
+@onready var question_mark_shoes = $"../Landing/ShoeUnlocker/QuestionMarkShoes"
+@onready var egg_hat = $Skeleton3D/Egg/EggMesh/EggHat
+@onready var head_hat = $Skeleton3D/Head/HeadMesh/HeadHat
+@onready var question_mark_hat = $"../Landing/HatUnlocker/QuestionMarkHat"
+@onready var hat_look = $HatLook
 
 
 var health := 15.0:
 	set(value):
 		health = value
+		if health <= 0.0:
+			_die()
 var knockback := false
 var knockback_direction := Vector3.ZERO
 var knockback_strength := 1.0
@@ -122,6 +141,34 @@ var roll_windup := 0.0:
 		roll_windup = clamp(value, 0.0, 3.0)
 var roll_timeout := 0.0
 var roll_sent := false
+var dead := false
+
+
+var shoes_unlocked := false:
+	set(value):
+		shoes_unlocked = value
+		fancy_boot.visible = shoes_unlocked
+		fancy_boot_2.visible = shoes_unlocked
+var new_shoes := false:
+	set(value):
+		new_shoes = value
+		emit_signal("newshoes", new_shoes)
+		if new_shoes:
+			shoes_unlocked = true
+			new_shoes_timer.start()
+var hat_unlocked := false:
+	set(value):
+		hat_unlocked = value
+		egg_hat.visible = hat_unlocked
+		head_hat.visible = hat_unlocked
+var new_hat := false:
+	set(value):
+		new_hat = value
+		emit_signal("newhat", new_hat)
+		if new_hat:
+			hat_unlocked = true
+			new_shoes_timer.start()
+var not_in_control := false
 
 
 func _ready():
@@ -148,7 +195,6 @@ func _unhandled_input(event):
 
 
 func _process(delta):
-	
 	if Input.is_action_just_pressed("modeswitch") and not (rolling or roll_intro):
 		egg_mode = not egg_mode
 	
@@ -188,6 +234,15 @@ func _process(delta):
 
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("respawn"):
+		velocity = Vector3.ZERO
+		knockback = false
+		roll_intro = false
+		rolling = false
+		attacking = false
+		falling = false
+		global_position = spawn_node.global_position
+	
 	var sprint := 1.0
 	
 	cam_hinge_h.rotation.y = rot_h
@@ -214,6 +269,7 @@ func _physics_process(delta):
 				fall_damaged = true
 				animation_player.current_animation = "splits"
 				animation_player.speed_scale = 2.0
+				emit_signal("camera_shake", 0.2)
 	
 	if not fall_damaged:
 		
@@ -246,7 +302,11 @@ func _physics_process(delta):
 		
 		var direction : Vector3 = (cam_hinge_h.transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 		var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
-		if knockback:
+		if new_hat or new_shoes:
+			velocity.x = lerp(velocity.x, 0.0, 0.3)
+			velocity.z = lerp(velocity.z, 0.0, 0.3)
+			animation_player.current_animation = "RESET"
+		elif knockback:
 			print("knockback")
 			if not rolling:
 				velocity = knockback_direction * knockback_strength
@@ -344,6 +404,15 @@ func _physics_process(delta):
 		move_and_slide()
 
 
+func _die():
+	knockback = false
+	roll_intro = false
+	rolling = false
+	attacking = false
+	global_position = spawn_node.global_position
+	health = MAX_HEALTH
+
+
 func _fire_wind_gust():
 	var wg = WIND_GUST.instantiate()
 	wg.velocity = -attack_origin.global_transform.basis.z
@@ -389,6 +458,7 @@ func _eggshell_effect():
 		material = egg_mesh.get_surface_override_material(0)
 		if damaged:
 			material.detail_enabled = true
+			crack_heal_timer.start()
 		else:
 			material.detail_enabled = false
 
@@ -421,3 +491,45 @@ func _on_roll_body_body_entered(body):
 			var dir = global_position.direction_to(body.knockback_reciever.global_position)
 			body.knockback_direction = Vector3(dir.x, 1.0, dir.y).normalized()
 			body.knockback = true
+
+
+func _on_start_area_body_entered(body):
+	if body == self:
+		spawn_node = start
+
+
+func _on_roller_area_body_entered(body):
+	if body == self:
+		spawn_node = before_roller
+
+
+func _on_before_stairs_area_body_entered(body):
+	if body == self:
+		spawn_node = before_stairs
+
+
+func _on_crack_heal_timer_timeout():
+	damaged = false
+
+
+func _on_new_shoes_timer_timeout():
+	new_shoes = false
+	new_hat = false
+
+
+func _on_shoe_unlocker_body_entered(body):
+	if body == self and not shoes_unlocked:
+		question_mark_shoes.visible = false
+		new_shoes = true
+		emit_signal("ui_msg", "New Shoes Unlocked!")
+
+
+func _on_defeat_ganon_timeout():
+	emit_signal("ui_msg", "Defeat Ganon")
+
+
+func _on_hat_unlocker_body_entered(body):
+	if body == self and not hat_unlocked:
+		question_mark_hat.visible = false
+		new_hat = true
+		emit_signal("ui_msg", "New Hat Unlocked!")

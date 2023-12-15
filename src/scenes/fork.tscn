@@ -1730,7 +1730,6 @@ wait_time = 5.0
 one_shot = true
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-debug_enabled = true
 
 [node name="TallCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -1891,12 +1890,12 @@ head_height = 0.7
 shoulder_height = 0.3
 
 [node name="Torso" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000474975, 0.900475, 0.030475)
 bone_name = "Spine0"
 bone_idx = 0
 
 [node name="ThighL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, -0.199525, 0.900475, 0.030475)
 bone_name = "HipL"
 bone_idx = 12
 
@@ -1911,7 +1910,7 @@ mesh = SubResource("SphereMesh_n2nav")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="ThighR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.2, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 0.965925, -0.258818, 0, 0.258818, 0.965925, 0.200475, 0.900475, 0.030475)
 bone_name = "HipR"
 bone_idx = 16
 
@@ -1927,7 +1926,7 @@ mesh = SubResource("SphereMesh_n2nav")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="ShinL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -0.2, 0.45, 0)
+transform = Transform3D(1, 0, 0, 0, -0.499999, 0.866025, 0, -0.866025, -0.499999, -0.199525, 0.465808, -0.0859934)
 bone_name = "ThighL"
 bone_idx = 13
 
@@ -1937,7 +1936,7 @@ mesh = SubResource("CylinderMesh_8c1l1")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="ShinR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.2, 0.45, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 1.49012e-08, 0, -1.49012e-08, 0.999999, 0.200475, 0.465809, -0.0859933)
 bone_name = "ThighR"
 bone_idx = 17
 
@@ -1947,7 +1946,7 @@ mesh = SubResource("CylinderMesh_8c1l1")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="FootL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -0.2, 4.47035e-07, 0)
+transform = Transform3D(1, 0, 0, 0, -0.499999, 0.866025, 0, -0.866025, -0.499999, -0.199525, 0.690808, 0.303718)
 bone_name = "ShinL"
 bone_idx = 14
 
@@ -1962,7 +1961,7 @@ unit_size = 2.25
 max_distance = 100.0
 
 [node name="FootR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.2, 8.9407e-07, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 1.49012e-08, 0, -1.49012e-08, 0.999999, 0.200475, 0.0158092, -0.0859933)
 bone_name = "ShinR"
 bone_idx = 18
 
@@ -1977,7 +1976,7 @@ unit_size = 2.25
 max_distance = 100.0
 
 [node name="Neck" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0, 1.2, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999998, -4.37113e-08, 0, 4.37113e-08, 0.999998, 0.000474975, 1.20047, 0.030475)
 bone_name = "Spine1"
 bone_idx = 1
 
@@ -1996,7 +1995,7 @@ damage = 4.0
 knockback_strength = 10.0
 
 [node name="Head" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0, 1.9, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999998, -4.37113e-08, 0, 4.37113e-08, 0.999998, 0.000474975, 1.90047, 0.030475)
 bone_name = "Spine2"
 bone_idx = 2
 
