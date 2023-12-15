@@ -11,7 +11,6 @@ var x_form_target_queued := true
 var player_node: CharacterBody3D:
 	set(value):
 		player_node = value
-		player_node.sprinting.connect(_on_player_sprinting)
 var player_node_queued := true
 var player_sprinting := false
 var fov_changing := false
@@ -24,6 +23,7 @@ var shaking := false:
 			shake_timer = 0.0
 var default_v_offset := 0.1
 var default_h_offset := 0.0
+var current_lerp := 0.2
 
 
 # Called when the node enters the scene tree for the first time.
@@ -51,7 +51,8 @@ func _process(delta):
 		h_offset = lerp(h_offset, default_h_offset, 0.1)
 		v_offset = lerp(v_offset, default_v_offset, 0.1)
 	if x_form_target:
-		global_transform = global_transform.interpolate_with(x_form_target.global_transform, lerp_strength)
+		current_lerp = lerp(current_lerp, lerp_strength, 0.1)
+		global_transform = global_transform.interpolate_with(x_form_target.global_transform, current_lerp)
 	if fov_changing:
 		if player_sprinting:
 			fov = lerp(fov, SPRINT_FOV, 0.05)
@@ -70,15 +71,11 @@ func _on_player_sprinting(value):
 
 
 func _on_global_player_node_changed(value):
-	if player_node_queued:
-		player_node_queued = false
-		player_node = value
+	player_node = value
 
 
 func _on_global_camxform_changed(value):
-	if x_form_target_queued:
-		x_form_target_queued = false
-		x_form_target = value
+	x_form_target = value
 
 
 func _on_chicken_egg_newshoes(value):

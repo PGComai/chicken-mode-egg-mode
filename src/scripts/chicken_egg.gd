@@ -68,6 +68,7 @@ const ROLL_KNOCKBACK_STRENGTH = 10.0
 @onready var head_hat = $Skeleton3D/Head/HeadMesh/HeadHat
 @onready var question_mark_hat = $"../Landing/HatUnlocker/QuestionMarkHat"
 @onready var hat_look = $HatLook
+@onready var shadow_cast = $ShadowCast
 
 
 var health := 15.0:
@@ -168,7 +169,14 @@ var new_hat := false:
 		if new_hat:
 			hat_unlocked = true
 			new_shoes_timer.start()
-var not_in_control := false
+var not_in_control := false:
+	set(value):
+		not_in_control = value
+		shadow_cast.enabled = not not_in_control
+		if not not_in_control:
+			global.player_node = self
+			global.cam_x_form_node = cam_x_form
+var x_form_ref: Node3D
 
 
 func _ready():
@@ -189,48 +197,55 @@ func _ready():
 
 
 func _unhandled_input(event):
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and not not_in_control:
 		rot_h -= event.relative.x * SENSITIVITY
 		rot_v -= event.relative.y * SENSITIVITY
 
 
 func _process(delta):
-	if Input.is_action_just_pressed("modeswitch") and not (rolling or roll_intro):
-		egg_mode = not egg_mode
-	
-	cam_hinge_h.global_position = global_position
-	foot_step_l.pitch_scale = randfn(1.0, 0.02)
-	foot_step_r.pitch_scale = randfn(1.0, 0.02)
-	
-	
-	if rolling and roll_body.get_colliding_bodies().size() > 0:
-		roll_dust.emitting = true
-		roll_dust_launch.emitting = false
-	elif roll_intro:
-		roll_dust.emitting = false
-		roll_dust_launch.emitting = true
-	else:
-		roll_dust.emitting = false
-		roll_dust_launch.emitting = false
-	
-	
-	if not fall_damaged:
-		if (Input.is_action_just_pressed("attack") and
-				not attacking and
-				not egg_mode and
-				can_gust):
-			attacking = true
-			can_gust = false
-			gust_timer.start()
-		elif Input.is_action_pressed("attack") and egg_mode and not rolling:
-			roll_windup += delta * 1.0
-			if roll_windup > 0.25:
-				roll_intro = true
+	if not not_in_control:
 		
-		if Input.is_action_just_released("attack") and roll_windup > 0.25 and egg_mode:
-			rolling = true
-			print("rolling!")
-			roll_intro = false
+		cam_hinge_h.rotation.y = rot_h
+		cam_hinge_v.rotation.x = rot_v
+		
+		if Input.is_action_just_pressed("modeswitch") and not (rolling or roll_intro):
+			egg_mode = not egg_mode
+		
+		cam_hinge_h.global_position = global_position
+		foot_step_l.pitch_scale = randfn(1.0, 0.02)
+		foot_step_r.pitch_scale = randfn(1.0, 0.02)
+		
+		
+		if rolling and roll_body.get_colliding_bodies().size() > 0:
+			roll_dust.emitting = true
+			roll_dust_launch.emitting = false
+		elif roll_intro:
+			roll_dust.emitting = false
+			roll_dust_launch.emitting = true
+		else:
+			roll_dust.emitting = false
+			roll_dust_launch.emitting = false
+		
+		
+		if not fall_damaged:
+			if (Input.is_action_just_pressed("attack") and
+					not attacking and
+					not egg_mode and
+					can_gust):
+				attacking = true
+				can_gust = false
+				gust_timer.start()
+			elif Input.is_action_pressed("attack") and egg_mode and not rolling:
+				roll_windup += delta * 1.0
+				if roll_windup > 0.25:
+					roll_intro = true
+			
+			if Input.is_action_just_released("attack") and roll_windup > 0.25 and egg_mode:
+				rolling = true
+				print("rolling!")
+				roll_intro = false
+	else:
+		global_transform = x_form_ref.global_transform
 
 
 func _physics_process(delta):
@@ -243,130 +258,132 @@ func _physics_process(delta):
 		falling = false
 		global_position = spawn_node.global_position
 	
-	var sprint := 1.0
-	
-	cam_hinge_h.rotation.y = rot_h
-	cam_hinge_v.rotation.x = rot_v
-	
-	if not is_on_floor() and not rolling:
-		steaming = false
-		falling = true
-		falling_velocity = velocity.y
-		velocity.y -= gravity * delta * mode_fall_multiplier
-	else:
-		if hot_cast.is_colliding():
-			steaming = true
-		else:
+	if not not_in_control:
+		var sprint := 1.0
+		
+		if not is_on_floor() and not rolling:
 			steaming = false
-		if slippery_cast.is_colliding():
-			slipping = true
-			#velocity.y -= gravity * delta * 10.0
+			falling = true
+			falling_velocity = velocity.y
+			velocity.y -= gravity * delta * mode_fall_multiplier
 		else:
-			slipping = false
-		if falling:
-			falling = false
-			if falling_velocity <= FALL_DAMAGE_VELOCITY:
-				fall_damaged = true
-				animation_player.current_animation = "splits"
-				animation_player.speed_scale = 2.0
-				emit_signal("camera_shake", 0.2)
-	
-	if not fall_damaged:
-		
-		var just_jumped := false
-		if Input.is_action_just_pressed("jump") and is_on_floor():
-			if double_jump_ready:
-				velocity.y = JUMP_VELOCITY * 1.5
-				print("double jump")
-				double_jump_ready = false
+			if hot_cast.is_colliding():
+				steaming = true
 			else:
-				velocity.y = JUMP_VELOCITY
-				double_jump_ready = true
-			just_jumped = true
-		
-		var input_dir := Input.get_vector("left", "right", "forward", "back")
-		var input_strength := input_dir.length()
-		
-		if input_dir.is_equal_approx(Vector2.ZERO) and not stopped:
-			stopped = true
-			emit_signal("sprinting", false)
-		elif not input_dir.is_equal_approx(Vector2.ZERO) and stopped:
-			stopped = false
-			if is_equal_approx(sprint, SPRINT_MULTIPLIER):
-				emit_signal("sprinting", true)
-		
-		#if Input.is_action_just_pressed("sprint") and not stopped:
-			#emit_signal("sprinting", true)
-		#elif Input.is_action_just_released("sprint"):
-			#emit_signal("sprinting", false)
-		
-		var direction : Vector3 = (cam_hinge_h.transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
-		var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
-		if new_hat or new_shoes:
-			velocity.x = lerp(velocity.x, 0.0, 0.3)
-			velocity.z = lerp(velocity.z, 0.0, 0.3)
-			animation_player.current_animation = "RESET"
-		elif knockback:
-			print("knockback")
-			if not rolling:
-				velocity = knockback_direction * knockback_strength
+				steaming = false
+			if slippery_cast.is_colliding():
+				slipping = true
+				#velocity.y -= gravity * delta * 10.0
 			else:
-				roll_body.apply_central_impulse(knockback_direction * knockback_strength * 1.0)
-			knockback = false
-		elif roll_intro:
-			velocity.x = lerp(velocity.x, 0.0, 0.3)
-			velocity.z = lerp(velocity.z, 0.0, 0.3)
-			animation_player.current_animation = "eggroll"
-			body_face_angle = cam_hinge_h.basis.z.signed_angle_to(Vector3.BACK, Vector3.UP)
-			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
-			animation_player.speed_scale = max(ceil(roll_windup), 0.5)
-		elif rolling:
-			if not roll_sent:
-				roll_body.apply_central_impulse(-cam_hinge_h.transform.basis.z * ceil(roll_windup) * 10.0)
-				roll_sent = true
-				roll_windup = 0.0
-				roll_boom.emitting = true
-			else:
-				roll_body.apply_central_force(direction * delta * 200.0)
-			animation_player.current_animation = "eggroll"
-			global_position = roll_body.global_position - Vector3(0.0, 0.5, 0.0)
-			body_face_angle = roll_body.linear_velocity.signed_angle_to(Vector3.FORWARD, Vector3.UP)
-			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.05)
-			if roll_body.linear_velocity.length_squared() < 1.0:
-				roll_timeout += delta
-				if roll_timeout > 1.0:
-					rolling = false
-					roll_timeout = 0.0
-					roll_sent = false
-		elif direction and not falling and not attacking:
-			velocity.x = lerp(velocity.x, direction.x * 
-												SPEED * 
-												sprint * 
-												mode_speed_multiplier, 0.1)
-			velocity.z = lerp(velocity.z, direction.z * 
-												SPEED * 
-												sprint * 
-												mode_speed_multiplier, 0.1)
-			animation_player.current_animation = running_animation
-			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
-			var goofy_run = remap(velocity.length(), 0.0, SPEED * 
-															sprint * 
-															mode_speed_multiplier, 0.0, 1.0)
-			goofy_run = clamp(goofy_run, 0.0, 1.0)
-			goofy_run = 1.0 - goofy_run
-			goofy_run += 1.0
-			animation_player.speed_scale = (goofy_run * 
-										EGG_RUN_SPEED_SCALE * 
-										sprint * 
-										slipping_animation_multiplier * 
-										mode_speed_multiplier)
-		elif attacking:
-			body_face_angle = cam_hinge_h.transform.basis.z.signed_angle_to(Vector3.BACK, Vector3.UP)
-			rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
-			if not falling:
+				slipping = false
+			if falling:
+				falling = false
+				if falling_velocity <= FALL_DAMAGE_VELOCITY:
+					fall_damaged = true
+					animation_player.current_animation = "splits"
+					animation_player.speed_scale = 2.0
+					emit_signal("camera_shake", 0.2)
+		
+		if not fall_damaged:
+			
+			var just_jumped := false
+			if Input.is_action_just_pressed("jump") and is_on_floor():
+				if double_jump_ready:
+					velocity.y = JUMP_VELOCITY * 1.5
+					print("double jump")
+					double_jump_ready = false
+				else:
+					velocity.y = JUMP_VELOCITY
+					double_jump_ready = true
+				just_jumped = true
+			
+			var input_dir := Input.get_vector("left", "right", "forward", "back")
+			var input_strength := input_dir.length()
+			
+			if input_dir.is_equal_approx(Vector2.ZERO) and not stopped:
+				stopped = true
+				emit_signal("sprinting", false)
+			elif not input_dir.is_equal_approx(Vector2.ZERO) and stopped:
+				stopped = false
+			
+			var direction : Vector3 = (cam_hinge_h.transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
+			var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+			if new_hat or new_shoes:
 				velocity.x = lerp(velocity.x, 0.0, 0.3)
 				velocity.z = lerp(velocity.z, 0.0, 0.3)
-			else:
+				animation_player.current_animation = "RESET"
+			elif knockback:
+				print("knockback")
+				if not rolling:
+					velocity = knockback_direction * knockback_strength
+				else:
+					roll_body.apply_central_impulse(knockback_direction * knockback_strength * 1.0)
+				knockback = false
+			elif roll_intro:
+				velocity.x = lerp(velocity.x, 0.0, 0.3)
+				velocity.z = lerp(velocity.z, 0.0, 0.3)
+				animation_player.current_animation = "eggroll"
+				body_face_angle = cam_hinge_h.basis.z.signed_angle_to(Vector3.BACK, Vector3.UP)
+				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
+				animation_player.speed_scale = max(ceil(roll_windup), 0.5)
+			elif rolling:
+				if not roll_sent:
+					roll_body.apply_central_impulse(-cam_hinge_h.transform.basis.z * ceil(roll_windup) * 10.0)
+					roll_sent = true
+					roll_windup = 0.0
+					roll_boom.emitting = true
+				else:
+					roll_body.apply_central_force(direction * delta * 200.0)
+				animation_player.current_animation = "eggroll"
+				global_position = roll_body.global_position - Vector3(0.0, 0.5, 0.0)
+				body_face_angle = roll_body.linear_velocity.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.05)
+				if roll_body.linear_velocity.length_squared() < 1.0:
+					roll_timeout += delta
+					if roll_timeout > 1.0:
+						rolling = false
+						roll_timeout = 0.0
+						roll_sent = false
+			elif direction and not falling and not attacking:
+				velocity.x = lerp(velocity.x, direction.x * 
+													SPEED * 
+													sprint * 
+													mode_speed_multiplier, 0.1)
+				velocity.z = lerp(velocity.z, direction.z * 
+													SPEED * 
+													sprint * 
+													mode_speed_multiplier, 0.1)
+				animation_player.current_animation = running_animation
+				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.1)
+				var goofy_run = remap(velocity.length(), 0.0, SPEED * 
+																sprint * 
+																mode_speed_multiplier, 0.0, 1.0)
+				goofy_run = clamp(goofy_run, 0.0, 1.0)
+				goofy_run = 1.0 - goofy_run
+				goofy_run += 1.0
+				animation_player.speed_scale = (goofy_run * 
+											EGG_RUN_SPEED_SCALE * 
+											sprint * 
+											slipping_animation_multiplier * 
+											mode_speed_multiplier)
+			elif attacking:
+				body_face_angle = cam_hinge_h.transform.basis.z.signed_angle_to(Vector3.BACK, Vector3.UP)
+				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.2)
+				if not falling:
+					velocity.x = lerp(velocity.x, 0.0, 0.3)
+					velocity.z = lerp(velocity.z, 0.0, 0.3)
+				else:
+					velocity.x = lerp(velocity.x, direction.x * 
+														SPEED * 
+														sprint * 
+														mode_speed_multiplier, 0.01)
+					velocity.z = lerp(velocity.z, direction.z * 
+														SPEED * 
+														sprint * 
+														mode_speed_multiplier, 0.01)
+				animation_player.current_animation = "chickengust"
+				animation_player.speed_scale = 3.0
+			elif falling:
 				velocity.x = lerp(velocity.x, direction.x * 
 													SPEED * 
 													sprint * 
@@ -375,33 +392,22 @@ func _physics_process(delta):
 													SPEED * 
 													sprint * 
 													mode_speed_multiplier, 0.01)
-			animation_player.current_animation = "chickengust"
-			animation_player.speed_scale = 3.0
-		elif falling:
-			velocity.x = lerp(velocity.x, direction.x * 
-												SPEED * 
-												sprint * 
-												mode_speed_multiplier, 0.01)
-			velocity.z = lerp(velocity.z, direction.z * 
-												SPEED * 
-												sprint * 
-												mode_speed_multiplier, 0.01)
-			if egg_mode:
-				if left_foot_back:
-					animation_player.current_animation = "eggmidairL"
+				if egg_mode:
+					if left_foot_back:
+						animation_player.current_animation = "eggmidairL"
+					else:
+						animation_player.current_animation = "eggmidairR"
 				else:
-					animation_player.current_animation = "eggmidairR"
+					animation_player.current_animation = "chickenjump"
+				if not stopped:
+					rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.01)
+				animation_player.speed_scale = 4.0
 			else:
-				animation_player.current_animation = "chickenjump"
-			if not stopped:
-				rotation.y = lerp_angle(rotation.y, -body_face_angle, 0.01)
-			animation_player.speed_scale = 4.0
-		else:
-			velocity.x = lerp(velocity.x, 0.0, 0.3)
-			velocity.z = lerp(velocity.z, 0.0, 0.3)
-			animation_player.current_animation = "RESET"
-		
-		move_and_slide()
+				velocity.x = lerp(velocity.x, 0.0, 0.3)
+				velocity.z = lerp(velocity.z, 0.0, 0.3)
+				animation_player.current_animation = "RESET"
+			
+			move_and_slide()
 
 
 func _die():

@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://dogiurexpe1n8"]
+[gd_scene load_steps=25 format=3 uid="uid://dogiurexpe1n8"]
 
 [ext_resource type="Script" path="res://scripts/Skeletor.gd" id="1_ab0e8"]
 [ext_resource type="Script" path="res://scripts/big_pot.gd" id="1_d4ycy"]
 [ext_resource type="Material" uid="uid://bw40mrqtssus0" path="res://textures/leg_material.tres" id="2_1gi1f"]
 [ext_resource type="Material" uid="uid://dfifd0koa1foh" path="res://textures/foot_material.tres" id="3_o1usm"]
+[ext_resource type="Script" path="res://scripts/spinnyquestionmark.gd" id="3_uf1b5"]
 [ext_resource type="AudioStream" uid="uid://e428g6svf87l" path="res://audio/big stomp.ogg" id="5_js02h"]
 
 [sub_resource type="Animation" id="Animation_jpv04"]
@@ -12,63 +13,63 @@ tracks/0/type = "position_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Skeleton3D:Spine0")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 0, 0.9, 0)
 tracks/1/type = "rotation_3d"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath("Skeleton3D:Spine0")
-tracks/1/interp = 1
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
 tracks/2/type = "rotation_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/path = NodePath("Skeleton3D:HipL")
-tracks/2/interp = 1
+tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
 tracks/3/type = "rotation_3d"
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/path = NodePath("Skeleton3D:ThighL")
-tracks/3/interp = 1
+tracks/3/interp = 2
 tracks/3/loop_wrap = true
 tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
 tracks/4/type = "rotation_3d"
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/path = NodePath("Skeleton3D:ShinL")
-tracks/4/interp = 1
+tracks/4/interp = 2
 tracks/4/loop_wrap = true
 tracks/4/keys = PackedFloat32Array(0, 1, -4.76792e-08, 0, 0, 1)
 tracks/5/type = "rotation_3d"
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/path = NodePath("Skeleton3D:HipR")
-tracks/5/interp = 1
+tracks/5/interp = 2
 tracks/5/loop_wrap = true
 tracks/5/keys = PackedFloat32Array(0, 1, -4.76792e-08, 0, 0, 1)
 tracks/6/type = "rotation_3d"
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/path = NodePath("Skeleton3D:ThighR")
-tracks/6/interp = 1
+tracks/6/interp = 2
 tracks/6/loop_wrap = true
 tracks/6/keys = PackedFloat32Array(0, 1, 4.76792e-08, 0, 0, 1)
 tracks/7/type = "rotation_3d"
 tracks/7/imported = false
 tracks/7/enabled = true
 tracks/7/path = NodePath("Skeleton3D:ShinR")
-tracks/7/interp = 1
+tracks/7/interp = 2
 tracks/7/loop_wrap = true
 tracks/7/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
 tracks/8/type = "scale_3d"
 tracks/8/imported = false
 tracks/8/enabled = true
 tracks/8/path = NodePath("Skeleton3D:Spine0")
-tracks/8/interp = 1
+tracks/8/interp = 2
 tracks/8/loop_wrap = true
 tracks/8/keys = PackedFloat32Array(0, 1, 1, 1, 1)
 
@@ -479,6 +480,12 @@ uv1_scale = Vector3(1, 0.005, 1)
 height = 2.79714
 radius = 2.2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yt7vg"]
+
+[sub_resource type="TextMesh" id="TextMesh_1wwq6"]
+text = "?"
+pixel_size = 0.0935
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_mk14c"]
 top_radius = 0.6
 bottom_radius = 0.3
@@ -674,7 +681,7 @@ waist_height = 4.5
 hip_diameter = 1.0
 
 [node name="Torso" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.20749, 0, 0.20749, 0.978723, 0, 0, 0, 1.00048, 0.000474975, 1.54248, 0.000474975)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 bone_name = "Spine0"
 bone_idx = 0
 
@@ -719,13 +726,23 @@ operation = 2
 size = Vector3(0.779, 0.5, 1.22)
 
 [node name="InPotArea" type="Area3D" parent="Skeleton3D/Torso/AnimatableBody3D"]
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Skeleton3D/Torso/AnimatableBody3D/InPotArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10624, 0)
 shape = SubResource("CylinderShape3D_pp14x")
 
+[node name="XFormPot" type="Node3D" parent="Skeleton3D/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.419609, 0)
+
+[node name="QuestionMarkPot" type="MeshInstance3D" parent="Skeleton3D/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.36441, 0)
+material_override = SubResource("StandardMaterial3D_yt7vg")
+mesh = SubResource("TextMesh_1wwq6")
+script = ExtResource("3_uf1b5")
+
 [node name="ThighL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.204017, -0.0378024, 0.20749, 0.962342, 0.178312, 1.75591e-09, -0.182275, 0.983731, -0.978248, 1.33499, 0.000474975)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.9, 0)
 bone_name = "HipL"
 bone_idx = 12
 
@@ -740,7 +757,7 @@ mesh = SubResource("SphereMesh_1dtce")
 surface_material_override/0 = ExtResource("2_1gi1f")
 
 [node name="ThighR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.185272, 0.0934153, 0.20749, 0.873921, -0.440636, 4.54527e-09, 0.450429, 0.893344, 0.979198, 1.74997, 0.000474975)
+transform = Transform3D(1, 0, 0, 0, 1, 9.53585e-08, 0, -9.53585e-08, 1, 1, 0.9, 0)
 bone_name = "HipR"
 bone_idx = 16
 
@@ -756,7 +773,7 @@ mesh = SubResource("SphereMesh_1dtce")
 surface_material_override/0 = ExtResource("2_1gi1f")
 
 [node name="ShinL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.204707, -0.0338695, 0.20749, 0.965595, 0.159761, 1.38953e-09, -0.163312, 0.987056, -0.519209, -0.830277, 0.410594)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -1.35, 0)
 bone_name = "ThighL"
 bone_idx = 13
 
@@ -766,7 +783,7 @@ mesh = SubResource("CylinderMesh_k5udw")
 surface_material_override/0 = ExtResource("2_1gi1f")
 
 [node name="ShinR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.068762, -0.195765, 0.20749, 0.324348, 0.923416, 6.73032e-09, -0.943939, 0.331556, 1.39606, -0.216349, -1.01299)
+transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 1, -1.35, 2.14557e-07)
 bone_name = "ThighR"
 bone_idx = 17
 
@@ -776,7 +793,7 @@ mesh = SubResource("CylinderMesh_k5udw")
 surface_material_override/0 = ExtResource("2_1gi1f")
 
 [node name="FootL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.161069, -0.130801, 0.20749, 0.759756, 0.616983, 1.3557e-09, -0.630696, 0.776642, -0.0586176, -3.00287, 0.778046)
+transform = Transform3D(1, 0, 0, 0, 1, 9.53585e-08, 0, -9.53585e-08, 1, -1, -3.6, 0)
 bone_name = "ShinL"
 bone_idx = 14
 
@@ -793,7 +810,7 @@ max_distance = 100.0
 max_polyphony = 3
 
 [node name="FootR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.0420488, -0.203185, 0.20749, 0.198343, 0.958415, 1.11628e-08, -0.979716, 0.202751, 1.55077, -0.946131, 1.11087)
+transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 1, -3.6, 2.14557e-07)
 bone_name = "ShinR"
 bone_idx = 18
 
@@ -809,12 +826,12 @@ max_distance = 100.0
 max_polyphony = 3
 
 [node name="Neck" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.20749, 0, 0.20749, 0.978723, 0, 0, 0, 1.00048, -0.31076, 3.01057, 0.000474975)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 bone_name = "Spine1"
 bone_idx = 1
 
 [node name="Head" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(0.978723, -0.20749, 0, 0.20749, 0.978723, 0, 0, 0, 1.00048, -0.456003, 3.69567, 0.000474975)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
 bone_name = "Spine2"
 bone_idx = 2
 
@@ -868,7 +885,12 @@ transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 
 spring_length = 25.0
 
 [node name="CamXForm" type="Node3D" parent="CamHingeH/CamHingeV/SpringArm3D"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.454443, 7.07872)
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0)
+
+[node name="BounceTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.2
+one_shot = true
 
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
 [connection signal="waypoint_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_waypoint_reached"]
@@ -876,3 +898,4 @@ transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 
 [connection signal="body_entered" from="Skeleton3D/Torso/AnimatableBody3D/InPotArea" to="." method="_on_in_pot_area_body_entered"]
 [connection signal="timeout" from="SearchTimer" to="." method="_on_search_timer_timeout"]
 [connection signal="timeout" from="NavTimer" to="." method="_on_nav_timer_timeout"]
+[connection signal="timeout" from="BounceTimer" to="." method="_on_bounce_timer_timeout"]
