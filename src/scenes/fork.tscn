@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bbei3ogwydkkf"]
+[gd_scene load_steps=29 format=3 uid="uid://bbei3ogwydkkf"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_4sfth"]
 [ext_resource type="Script" path="res://scripts/Skeletor.gd" id="1_5a57u"]
@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://bw40mrqtssus0" path="res://textures/leg_material.tres" id="5_3vnas"]
 [ext_resource type="Material" uid="uid://dfifd0koa1foh" path="res://textures/foot_material.tres" id="6_kek7v"]
 [ext_resource type="AudioStream" uid="uid://uyo70etg3qi2" path="res://audio/baby-pop.ogg" id="7_mx3ch"]
+[ext_resource type="Material" uid="uid://l51oopk8x5n5" path="res://textures/fork_material.tres" id="7_qusw0"]
 [ext_resource type="PackedScene" uid="uid://uai7y07tt7p7" path="res://scenes/damager.tscn" id="7_y60o5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4uefd"]
@@ -1680,30 +1681,14 @@ height = 0.08
 [sub_resource type="BoxMesh" id="BoxMesh_oa67o"]
 size = Vector3(0.1, 0.02, 0.3)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_h2xh0"]
-top_radius = 0.1
-bottom_radius = 0.2
-height = 0.7
-
 [sub_resource type="BoxMesh" id="BoxMesh_v5uu7"]
-size = Vector3(0.3, 2, 0.1)
+size = Vector3(0.2, 1.7, 0.05)
 
-[sub_resource type="SphereMesh" id="SphereMesh_4db85"]
-radius = 0.2
-height = 0.4
+[sub_resource type="BoxMesh" id="BoxMesh_mk7px"]
+size = Vector3(0.4, 0.1, 0.05)
 
-[sub_resource type="SphereMesh" id="SphereMesh_uu78i"]
-radius = 0.05
-height = 0.1
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_sc2uf"]
-top_radius = 0.0
-bottom_radius = 0.1
-height = 0.2
-cap_top = false
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbn8x"]
-albedo_color = Color(0.622417, 0.534671, 0.28368, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_l82o0"]
+size = Vector3(0.05, 0.5, 0.05)
 
 [sub_resource type="TextMesh" id="TextMesh_6arrg"]
 text = "!"
@@ -1890,12 +1875,12 @@ head_height = 0.7
 shoulder_height = 0.3
 
 [node name="Torso" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000474975, 0.900475, 0.030475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 bone_name = "Spine0"
 bone_idx = 0
 
 [node name="ThighL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, -0.199525, 0.900475, 0.030475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.9, 0)
 bone_name = "HipL"
 bone_idx = 12
 
@@ -1910,7 +1895,7 @@ mesh = SubResource("SphereMesh_n2nav")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="ThighR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.965925, -0.258818, 0, 0.258818, 0.965925, 0.200475, 0.900475, 0.030475)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.2, 0.9, 0)
 bone_name = "HipR"
 bone_idx = 16
 
@@ -1926,7 +1911,7 @@ mesh = SubResource("SphereMesh_n2nav")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="ShinL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, -0.499999, 0.866025, 0, -0.866025, -0.499999, -0.199525, 0.465808, -0.0859934)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -0.2, 0.45, 0)
 bone_name = "ThighL"
 bone_idx = 13
 
@@ -1936,7 +1921,7 @@ mesh = SubResource("CylinderMesh_8c1l1")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="ShinR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 1.49012e-08, 0, -1.49012e-08, 0.999999, 0.200475, 0.465809, -0.0859933)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.2, 0.45, 0)
 bone_name = "ThighR"
 bone_idx = 17
 
@@ -1946,7 +1931,7 @@ mesh = SubResource("CylinderMesh_8c1l1")
 surface_material_override/0 = ExtResource("5_3vnas")
 
 [node name="FootL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, -0.499999, 0.866025, 0, -0.866025, -0.499999, -0.199525, 0.690808, 0.303718)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -0.2, 4.47035e-07, 0)
 bone_name = "ShinL"
 bone_idx = 14
 
@@ -1961,7 +1946,7 @@ unit_size = 2.25
 max_distance = 100.0
 
 [node name="FootR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999999, 1.49012e-08, 0, -1.49012e-08, 0.999999, 0.200475, 0.0158092, -0.0859933)
+transform = Transform3D(1, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.2, 8.9407e-07, 0)
 bone_name = "ShinR"
 bone_idx = 18
 
@@ -1976,47 +1961,50 @@ unit_size = 2.25
 max_distance = 100.0
 
 [node name="Neck" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999998, -4.37113e-08, 0, 4.37113e-08, 0.999998, 0.000474975, 1.20047, 0.030475)
+transform = Transform3D(1, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0, 1.2, 0)
 bone_name = "Spine1"
 bone_idx = 1
 
-[node name="NeckMesh" type="MeshInstance3D" parent="Skeleton3D/Neck"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.411437, -0.0352979)
-visible = false
-mesh = SubResource("CylinderMesh_h2xh0")
-
 [node name="ForkMesh" type="MeshInstance3D" parent="Skeleton3D/Neck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 mesh = SubResource("BoxMesh_v5uu7")
 skeleton = NodePath("../../Torso")
+surface_material_override/0 = ExtResource("7_qusw0")
 
 [node name="ForkDamager" parent="Skeleton3D/Neck/ForkMesh" instance=ExtResource("7_y60o5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 damage = 4.0
 knockback_strength = 10.0
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/Neck/ForkMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("BoxMesh_mk7px")
+surface_material_override/0 = ExtResource("7_qusw0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/Neck/ForkMesh/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.175, 0.3, 0)
+mesh = SubResource("BoxMesh_l82o0")
+surface_material_override/0 = ExtResource("7_qusw0")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Skeleton3D/Neck/ForkMesh/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.175, 0.3, 0)
+mesh = SubResource("BoxMesh_l82o0")
+surface_material_override/0 = ExtResource("7_qusw0")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Skeleton3D/Neck/ForkMesh/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0.3, 0)
+mesh = SubResource("BoxMesh_l82o0")
+surface_material_override/0 = ExtResource("7_qusw0")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Skeleton3D/Neck/ForkMesh/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.3, 0)
+mesh = SubResource("BoxMesh_l82o0")
+surface_material_override/0 = ExtResource("7_qusw0")
+
 [node name="Head" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 0.999998, -4.37113e-08, 0, 4.37113e-08, 0.999998, 0.000474975, 1.90047, 0.030475)
+transform = Transform3D(1, 0, 0, 0, 0.999998, 0, 0, 0, 0.999998, 0, 1.9, 0)
 bone_name = "Spine2"
 bone_idx = 2
-
-[node name="HeadMesh" type="MeshInstance3D" parent="Skeleton3D/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.164935, 0.0223663)
-visible = false
-mesh = SubResource("SphereMesh_4db85")
-
-[node name="EyeR" type="MeshInstance3D" parent="Skeleton3D/Head/HeadMesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.173782, 0.0407583, 0.0649488)
-mesh = SubResource("SphereMesh_uu78i")
-
-[node name="EyeL" type="MeshInstance3D" parent="Skeleton3D/Head/HeadMesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.174, 0.041, 0.065)
-mesh = SubResource("SphereMesh_uu78i")
-
-[node name="BeakMesh" type="MeshInstance3D" parent="Skeleton3D/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.96046e-08, 0.390539, -0.0140542)
-visible = false
-mesh = SubResource("CylinderMesh_sc2uf")
-surface_material_override/0 = SubResource("StandardMaterial3D_pbn8x")
 
 [node name="SlipperyCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.124771, 0)

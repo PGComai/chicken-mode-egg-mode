@@ -73,98 +73,6 @@ tracks/8/interp = 2
 tracks/8/loop_wrap = true
 tracks/8/keys = PackedFloat32Array(0, 1, 1, 1, 1)
 
-[sub_resource type="Animation" id="Animation_eg1xm"]
-resource_name = "potrun"
-length = 0.8
-loop_mode = 1
-tracks/0/type = "position_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Skeleton3D:Spine0")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0.000474975, 1.50048, 0.000474975, 0.1, 1, 0.000474975, 1.50048, 0.000474975, 0.2, 1, 0.000474975, 1.00048, 0.000474975, 0.4, 1, 0.000474975, 1.50048, 0.000474975, 0.5, 1, 0.000474975, 1.50048, 0.000474975, 0.6, 1, 0.000474975, 1.00048, 0.000474975)
-tracks/1/type = "rotation_3d"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Skeleton3D:Spine0")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0.130526, 0.991445, 0.2, 1, 0, 0, 0, 1, 0.4, 1, 0, 0, -0.130526, 0.991445, 0.6, 1, 0, 0, 7.45058e-09, 1)
-tracks/2/type = "rotation_3d"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Skeleton3D:HipL")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = PackedFloat32Array(0, 1, -2.38396e-08, -2.97995e-09, 0, 1, 0.1, 1, -0.130526, 1.0067e-10, 1.32531e-11, 0.991445, 0.2, 1, -0.258819, 2.97315e-09, 7.96652e-10, 0.965926, 0.4, 1, 0.130526, 0, 0, 0.991445, 0.5, 1, 0.258819, -2.87841e-09, 7.71267e-10, 0.965926, 0.6, 1, 0.258819, -2.87841e-09, 7.71268e-10, 0.965926)
-tracks/3/type = "rotation_3d"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Skeleton3D:ThighL")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, 0, 1, 0.2, 1, -0.130526, -1.69144e-09, -4.73532e-09, 0.991445, 0.4, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.5, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.6, 1, 0, 0, 0, 1)
-tracks/4/type = "rotation_3d"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Skeleton3D:ShinL")
-tracks/4/interp = 2
-tracks/4/loop_wrap = true
-tracks/4/keys = PackedFloat32Array(0, 1, -0.258819, 0, 0, 0.965926, 0.1, 1, -0.258819, 0, 0, 0.965926, 0.2, 1, -0.258819, 0, 0, 0.965926, 0.4, 1, 0, 0, 0, 1, 0.5, 1, -0.130526, -1.35863e-09, -3.28003e-09, 0.991445, 0.6, 1, -0.5, 2.83787e-09, -1.01777e-08, 0.866025)
-tracks/5/type = "rotation_3d"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Skeleton3D:HipR")
-tracks/5/interp = 2
-tracks/5/loop_wrap = true
-tracks/5/keys = PackedFloat32Array(0, 1, 0.130526, 0, 0, 0.991445, 0.1, 1, 0.258819, -2.87841e-09, 7.71267e-10, 0.965926, 0.2, 1, 0.258819, -2.87841e-09, 7.71268e-10, 0.965926, 0.4, 1, 0, 0, 0, 1, 0.5, 1, -0.130526, 1.0067e-10, 1.32531e-11, 0.991445, 0.6, 1, -0.258819, 2.97315e-09, 7.96652e-10, 0.965926)
-tracks/6/type = "rotation_3d"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Skeleton3D:ThighR")
-tracks/6/interp = 2
-tracks/6/loop_wrap = true
-tracks/6/keys = PackedFloat32Array(0, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.1, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.2, 1, 1.49012e-07, 2.94398e-09, -1.66009e-08, 1, 0.4, 1, 0, 0, 0, 1, 0.5, 1, 0, 0, 0, 1, 0.6, 1, -0.130526, -1.69144e-09, -4.73532e-09, 0.991445)
-tracks/7/type = "rotation_3d"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Skeleton3D:ShinR")
-tracks/7/interp = 2
-tracks/7/loop_wrap = true
-tracks/7/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, -0.130526, -1.35863e-09, -3.28003e-09, 0.991445, 0.2, 1, -0.5, 2.83787e-09, -1.01777e-08, 0.866025, 0.4, 1, -0.258819, 0, 0, 0.965926, 0.5, 1, -0.258819, 0, 0, 0.965926, 0.6, 1, -0.258819, 0, 0, 0.965926)
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("Skeleton3D/FootL/MeshInstance3D/FootStepL:playing")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("Skeleton3D/FootR/MeshInstance3D/FootStepR:playing")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0.4),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/10/type = "scale_3d"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("Skeleton3D:Spine0")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = PackedFloat32Array(0, 1, 1.00048, 1.00048, 1.00048)
-
 [sub_resource type="Animation" id="Animation_qq0eq"]
 resource_name = "alerted"
 tracks/0/type = "position_3d"
@@ -455,6 +363,98 @@ tracks/40/interp = 1
 tracks/40/loop_wrap = true
 tracks/40/keys = PackedFloat32Array(0, 1, 1, 1, 1)
 
+[sub_resource type="Animation" id="Animation_eg1xm"]
+resource_name = "potrun"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skeleton3D:Spine0")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.000474975, 1.50048, 0.000474975, 0.1, 1, 0.000474975, 1.50048, 0.000474975, 0.2, 1, 0.000474975, 1.00048, 0.000474975, 0.4, 1, 0.000474975, 1.50048, 0.000474975, 0.5, 1, 0.000474975, 1.50048, 0.000474975, 0.6, 1, 0.000474975, 1.00048, 0.000474975)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Skeleton3D:Spine0")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0.130526, 0.991445, 0.2, 1, 0, 0, 0, 1, 0.4, 1, 0, 0, -0.130526, 0.991445, 0.6, 1, 0, 0, 7.45058e-09, 1)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Skeleton3D:HipL")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -2.38396e-08, -2.97995e-09, 0, 1, 0.1, 1, -0.130526, 1.0067e-10, 1.32531e-11, 0.991445, 0.2, 1, -0.258819, 2.97315e-09, 7.96652e-10, 0.965926, 0.4, 1, 0.130526, 0, 0, 0.991445, 0.5, 1, 0.258819, -2.87841e-09, 7.71267e-10, 0.965926, 0.6, 1, 0.258819, -2.87841e-09, 7.71268e-10, 0.965926)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Skeleton3D:ThighL")
+tracks/3/interp = 2
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, 0, 0, 0, 1, 0.2, 1, -0.130526, -1.69144e-09, -4.73532e-09, 0.991445, 0.4, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.5, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.6, 1, 0, 0, 0, 1)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Skeleton3D:ShinL")
+tracks/4/interp = 2
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, -0.258819, 0, 0, 0.965926, 0.1, 1, -0.258819, 0, 0, 0.965926, 0.2, 1, -0.258819, 0, 0, 0.965926, 0.4, 1, 0, 0, 0, 1, 0.5, 1, -0.130526, -1.35863e-09, -3.28003e-09, 0.991445, 0.6, 1, -0.5, 2.83787e-09, -1.01777e-08, 0.866025)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Skeleton3D:HipR")
+tracks/5/interp = 2
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, 0.130526, 0, 0, 0.991445, 0.1, 1, 0.258819, -2.87841e-09, 7.71267e-10, 0.965926, 0.2, 1, 0.258819, -2.87841e-09, 7.71268e-10, 0.965926, 0.4, 1, 0, 0, 0, 1, 0.5, 1, -0.130526, 1.0067e-10, 1.32531e-11, 0.991445, 0.6, 1, -0.258819, 2.97315e-09, 7.96652e-10, 0.965926)
+tracks/6/type = "rotation_3d"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Skeleton3D:ThighR")
+tracks/6/interp = 2
+tracks/6/loop_wrap = true
+tracks/6/keys = PackedFloat32Array(0, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.1, 1, -0.707107, 6.91549e-10, -5.26836e-09, 0.707107, 0.2, 1, 1.49012e-07, 2.94398e-09, -1.66009e-08, 1, 0.4, 1, 0, 0, 0, 1, 0.5, 1, 0, 0, 0, 1, 0.6, 1, -0.130526, -1.69144e-09, -4.73532e-09, 0.991445)
+tracks/7/type = "rotation_3d"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Skeleton3D:ShinR")
+tracks/7/interp = 2
+tracks/7/loop_wrap = true
+tracks/7/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.1, 1, -0.130526, -1.35863e-09, -3.28003e-09, 0.991445, 0.2, 1, -0.5, 2.83787e-09, -1.01777e-08, 0.866025, 0.4, 1, -0.258819, 0, 0, 0.965926, 0.5, 1, -0.258819, 0, 0, 0.965926, 0.6, 1, -0.258819, 0, 0, 0.965926)
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Skeleton3D/FootL/MeshInstance3D/FootStepL:playing")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Skeleton3D/FootR/MeshInstance3D/FootStepR:playing")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/10/type = "scale_3d"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Skeleton3D:Spine0")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = PackedFloat32Array(0, 1, 1.00048, 1.00048, 1.00048)
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rw7lt"]
 _data = {
 "RESET": SubResource("Animation_jpv04"),
@@ -520,7 +520,7 @@ albedo_color = Color(0.843137, 0.298039, 0, 1)
 disable_receive_shadows = true
 billboard_mode = 1
 
-[node name="BigPot" type="CharacterBody3D"]
+[node name="BigPot" type="CharacterBody3D" groups=["knockbackable"]]
 script = ExtResource("1_d4ycy")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
@@ -735,10 +735,13 @@ shape = SubResource("CylinderShape3D_pp14x")
 [node name="XFormPot" type="Node3D" parent="Skeleton3D/Torso"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.419609, 0)
 
-[node name="QuestionMarkPot" type="MeshInstance3D" parent="Skeleton3D/Torso"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.36441, 0)
+[node name="QMarkHolder" type="Node3D" parent="Skeleton3D/Torso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.92496, 0)
+
+[node name="QuestionMarkPot" type="MeshInstance3D" parent="Skeleton3D/Torso/QMarkHolder"]
 material_override = SubResource("StandardMaterial3D_yt7vg")
 mesh = SubResource("TextMesh_1wwq6")
+skeleton = NodePath("../..")
 script = ExtResource("3_uf1b5")
 
 [node name="ThighL" type="BoneAttachment3D" parent="Skeleton3D"]
@@ -757,7 +760,7 @@ mesh = SubResource("SphereMesh_1dtce")
 surface_material_override/0 = ExtResource("2_1gi1f")
 
 [node name="ThighR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 9.53585e-08, 0, -9.53585e-08, 1, 1, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 9.53584e-08, 0, -9.53584e-08, 1, 1, 0.9, 0)
 bone_name = "HipR"
 bone_idx = 16
 
@@ -783,7 +786,7 @@ mesh = SubResource("CylinderMesh_k5udw")
 surface_material_override/0 = ExtResource("2_1gi1f")
 
 [node name="ShinR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 1, -1.35, 2.14557e-07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1.35, 2.14556e-07)
 bone_name = "ThighR"
 bone_idx = 17
 
@@ -793,7 +796,7 @@ mesh = SubResource("CylinderMesh_k5udw")
 surface_material_override/0 = ExtResource("2_1gi1f")
 
 [node name="FootL" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 9.53585e-08, 0, -9.53585e-08, 1, -1, -3.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 9.53584e-08, 0, -9.53584e-08, 1, -1, -3.6, 0)
 bone_name = "ShinL"
 bone_idx = 14
 
@@ -810,7 +813,7 @@ max_distance = 100.0
 max_polyphony = 3
 
 [node name="FootR" type="BoneAttachment3D" parent="Skeleton3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 7.10543e-15, 0, -7.10543e-15, 1, 1, -3.6, 2.14557e-07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -3.6, 2.14556e-07)
 bone_name = "ShinR"
 bone_idx = 18
 
@@ -892,6 +895,10 @@ process_callback = 0
 wait_time = 0.2
 one_shot = true
 
+[node name="ControlTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
 [connection signal="waypoint_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_waypoint_reached"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
@@ -899,3 +906,4 @@ one_shot = true
 [connection signal="timeout" from="SearchTimer" to="." method="_on_search_timer_timeout"]
 [connection signal="timeout" from="NavTimer" to="." method="_on_nav_timer_timeout"]
 [connection signal="timeout" from="BounceTimer" to="." method="_on_bounce_timer_timeout"]
+[connection signal="timeout" from="ControlTimer" to="." method="_on_control_timer_timeout"]

@@ -2036,8 +2036,6 @@ shoulder_height = 0.3
 shoulder_length = 0.5
 bicep_length = 0.5
 forearm_length = 0.5
-hip_diameter = null
-leg_length = null
 
 [node name="Egg" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

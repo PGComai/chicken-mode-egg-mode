@@ -176,6 +176,8 @@ var not_in_control := false:
 		if not not_in_control:
 			global.player_node = self
 			global.cam_x_form_node = cam_x_form
+			velocity.y = JUMP_VELOCITY * 4.0
+			rotation = Vector3.ZERO
 var x_form_ref: Node3D
 
 
@@ -408,6 +410,9 @@ func _physics_process(delta):
 				animation_player.current_animation = "RESET"
 			
 			move_and_slide()
+	else:
+		if Input.is_action_just_pressed("modeswitch"):
+			not_in_control = false
 
 
 func _die():

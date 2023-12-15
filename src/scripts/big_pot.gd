@@ -40,7 +40,9 @@ const ACTIVITY_RANGE = 15000.0
 @onready var cam_x_form = $CamHingeH/CamHingeV/SpringArm3D/CamXForm
 @onready var x_form_pot = $Skeleton3D/Torso/XFormPot
 @onready var bounce_timer = $BounceTimer
-@onready var question_mark_pot = $Skeleton3D/Torso/QuestionMarkPot
+@onready var question_mark_pot = $Skeleton3D/Torso/QMarkHolder/QuestionMarkPot
+@onready var control_timer = $ControlTimer
+@onready var in_pot_area = $Skeleton3D/Torso/AnimatableBody3D/InPotArea
 
 
 var global: Node
@@ -116,6 +118,9 @@ var player_in_control := false:
 			stop_and_look = false
 			global.player_node = self
 			global.cam_x_form_node = cam_x_form
+		else:
+			control_timer.start()
+			in_pot_area.monitoring = false
 var rot_h := 0.0
 var rot_v := 0.0:
 	set(value):
@@ -169,6 +174,8 @@ func _process(delta):
 
 func _physics_process(delta):
 	if player_in_control:
+		if Input.is_action_just_pressed("modeswitch"):
+			player_in_control = false
 		if not is_on_floor():
 			#steaming = false
 			falling = true
@@ -213,6 +220,10 @@ func _physics_process(delta):
 		
 		var direction : Vector3 = (cam_hinge_h.transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 		var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
+		if knockback:
+			print("knockback")
+			velocity = knockback_direction * knockback_strength
+			knockback = false
 		if direction and not falling:
 			velocity.x = lerp(velocity.x, direction.x * 
 												SPEED * 
@@ -407,3 +418,7 @@ func _on_in_pot_area_body_entered(body):
 
 func _on_bounce_timer_timeout():
 	double_jump_ready = false
+
+
+func _on_control_timer_timeout():
+	in_pot_area.monitoring = true
