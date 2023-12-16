@@ -15,7 +15,7 @@ var count := 0.0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	start_pos = global_position
-	end_pos = start_pos + (direction * distance)
+	end_pos = start_pos + (direction.normalized() * distance)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

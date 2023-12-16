@@ -119,7 +119,7 @@ func _ready():
 
 
 func _process(delta):
-	if player_node.global_position.distance_squared_to(global_position) > ACTIVITY_RANGE and not player_position_known:
+	if (player_node.global_position.distance_squared_to(global_position) > ACTIVITY_RANGE and not player_position_known) or global.no_movement:
 		pass
 	else:
 		foot_step_l.pitch_scale = randfn(1.0, 0.02)
@@ -144,7 +144,7 @@ func _process(delta):
 
 
 func _physics_process(delta):
-	if player_node.global_position.distance_squared_to(global_position) > ACTIVITY_RANGE and not player_position_known:
+	if (player_node.global_position.distance_squared_to(global_position) > ACTIVITY_RANGE and not player_position_known) or global.no_movement:
 		pass
 	else:
 	#region player detection

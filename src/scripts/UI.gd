@@ -20,6 +20,9 @@ const WIN_OPTIONS = [DisplayServer.WINDOW_MODE_WINDOWED,
 @onready var confirm_label = $PauseMenu/MenuVBox/ConfirmLabel
 @onready var texture_rect = $TextureRect
 @onready var sub_viewport = $"../SubViewport"
+@onready var controls = $Controls
+@onready var mouse_sens = $PauseMenu/MenuVBox/MouseSens
+@onready var sens_h_slider = $PauseMenu/MenuVBox/SensHSlider
 
 
 var old_window_mode: DisplayServer.WindowMode
@@ -27,10 +30,11 @@ var old_res: Vector2i
 
 var display_settings_confirmed := false
 var counting_down := false
+var global: Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	global = get_node("/root/Global")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,6 +43,7 @@ func _process(delta):
 		get_tree().paused = not get_tree().paused
 		color_rect.visible = get_tree().paused
 		pause_menu.visible = get_tree().paused
+		controls.visible = get_tree().paused
 		if get_tree().paused:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
@@ -77,6 +82,7 @@ func _on_resume_button_up():
 	get_tree().paused = not get_tree().paused
 	color_rect.visible = get_tree().paused
 	pause_menu.visible = get_tree().paused
+	controls.visible = get_tree().paused
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
@@ -97,3 +103,8 @@ func _on_confirm_display_timer_timeout():
 		DisplayServer.window_set_size(old_res)
 		confirm_display.visible = false
 		confirm_label.visible = false
+
+
+func _on_sens_h_slider_value_changed(value):
+	global.sensitivity_multiplier = value
+	mouse_sens.text = "Mouse Sensitivity: %s" % value

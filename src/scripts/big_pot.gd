@@ -426,5 +426,5 @@ func _on_control_timer_timeout():
 
 func _on_ui_gui_input(event):
 	if event is InputEventMouseMotion and player_in_control:
-		rot_h -= event.relative.x * SENSITIVITY
-		rot_v -= event.relative.y * SENSITIVITY
+		rot_h -= event.relative.x * SENSITIVITY * global.sensitivity_multiplier
+		rot_v -= event.relative.y * SENSITIVITY * global.sensitivity_multiplier

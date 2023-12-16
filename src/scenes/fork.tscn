@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://uai7y07tt7p7" path="res://scenes/damager.tscn" id="7_y60o5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4uefd"]
-radius = 0.3
+radius = 0.2
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qq4re"]
 
@@ -1704,7 +1704,7 @@ billboard_mode = 1
 script = ExtResource("1_4sfth")
 
 [node name="BonkDetector" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02163, 0)
 collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BonkDetector"]

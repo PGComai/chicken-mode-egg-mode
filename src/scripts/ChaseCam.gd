@@ -99,3 +99,30 @@ func _on_chicken_egg_newhat(value):
 func _on_chicken_egg_camera_shake(zero_to_one):
 	shaking = true
 	shake_timer = zero_to_one
+
+
+func _on_chicken_egg_newtie(value):
+	if value:
+		x_form_target = player_node.tie_look
+		lerp_strength = 0.05
+	else:
+		x_form_target = global.cam_x_form_node
+		lerp_strength = 0.2
+
+
+func _on_chicken_egg_newknees(value):
+	if value:
+		x_form_target = player_node.knee_look
+		lerp_strength = 0.05
+	else:
+		x_form_target = global.cam_x_form_node
+		lerp_strength = 0.2
+
+
+func _on_chicken_egg_newshorts(value):
+	if value:
+		x_form_target = player_node.short_look
+		lerp_strength = 0.05
+	else:
+		x_form_target = global.cam_x_form_node
+		lerp_strength = 0.2

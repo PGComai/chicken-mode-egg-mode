@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://c3615mg6hyw76"]
+[gd_scene load_steps=92 format=3 uid="uid://c3615mg6hyw76"]
 
 [ext_resource type="Script" path="res://scripts/chicken_egg.gd" id="1_4cn5f"]
 [ext_resource type="Script" path="res://scripts/Skeletor.gd" id="1_ax3js"]
@@ -12,6 +12,7 @@
 [ext_resource type="Material" uid="uid://brvpqhldr6qtw" path="res://textures/hat_material.tres" id="8_862wa"]
 [ext_resource type="Script" path="res://scripts/FootL.gd" id="8_fqnfv"]
 [ext_resource type="Shader" uid="uid://cvo7vvh24dqsf" path="res://textures/steam.tres" id="8_wsrc0"]
+[ext_resource type="Material" uid="uid://cyjcusp8o8fvf" path="res://textures/shorts_material.tres" id="9_5kfvl"]
 [ext_resource type="Script" path="res://scripts/ShadowCast.gd" id="13_bc4hy"]
 
 [sub_resource type="Gradient" id="Gradient_ubdpg"]
@@ -1755,6 +1756,33 @@ height = 0.4
 material = ExtResource("8_862wa")
 height = 0.05
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ftgfi"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_iki0h"]
+material = SubResource("StandardMaterial3D_ftgfi")
+radius = 0.05
+height = 0.02
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_85sls"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_5isif"]
+material = SubResource("StandardMaterial3D_85sls")
+size = Vector3(0.2, 0.2, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k1whc"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_4qrr2"]
+material = SubResource("StandardMaterial3D_k1whc")
+size = Vector3(0.2, 0.2, 0.01)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_51y0r"]
+top_radius = 0.4
+bottom_radius = 0.35
+height = 0.2
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_dby8l"]
 top_radius = 0.02
 bottom_radius = 0.02
@@ -1763,6 +1791,22 @@ height = 0.45
 [sub_resource type="SphereMesh" id="SphereMesh_xlax6"]
 radius = 0.04
 height = 0.08
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5e00f"]
+albedo_color = Color(0, 0.666667, 0.0941176, 1)
+metallic = 0.79
+roughness = 0.33
+
+[sub_resource type="SphereMesh" id="SphereMesh_iyesg"]
+material = SubResource("StandardMaterial3D_5e00f")
+radius = 0.07
+height = 0.14
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bcnnh"]
+top_radius = 0.14
+bottom_radius = 0.16
+height = 0.4
+cap_bottom = false
 
 [sub_resource type="BoxMesh" id="BoxMesh_ggsow"]
 size = Vector3(0.1, 0.02, 0.3)
@@ -1799,7 +1843,12 @@ height = 0.7
 radius = 0.2
 height = 0.4
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a31u7"]
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 1)
+
 [sub_resource type="SphereMesh" id="SphereMesh_yen1r"]
+material = SubResource("StandardMaterial3D_a31u7")
 radius = 0.05
 height = 0.1
 
@@ -2085,6 +2134,27 @@ mesh = SubResource("CylinderMesh_p8htd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.431114, 0)
 mesh = SubResource("CylinderMesh_x0qxf")
 
+[node name="Bowtie" type="Node3D" parent="Skeleton3D/Egg/EggMesh"]
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Skeleton3D/Egg/EggMesh/Bowtie"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.1, -0.5)
+mesh = SubResource("SphereMesh_iki0h")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Skeleton3D/Egg/EggMesh/Bowtie"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.0646194, -0.1, -0.5)
+mesh = SubResource("PrismMesh_5isif")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Skeleton3D/Egg/EggMesh/Bowtie"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -0.065, -0.1, -0.5)
+mesh = SubResource("PrismMesh_4qrr2")
+
+[node name="ShortWaist" type="MeshInstance3D" parent="Skeleton3D/Egg"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00884306, 0)
+visible = false
+mesh = SubResource("CylinderMesh_51y0r")
+surface_material_override/0 = ExtResource("9_5kfvl")
+
 [node name="ThighL" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.9, 0)
 bone_name = "HipL"
@@ -2099,6 +2169,17 @@ surface_material_override/0 = ExtResource("4_rdq6j")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 mesh = SubResource("SphereMesh_xlax6")
 surface_material_override/0 = ExtResource("4_rdq6j")
+
+[node name="NewKneeL" type="MeshInstance3D" parent="Skeleton3D/ThighL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+visible = false
+mesh = SubResource("SphereMesh_iyesg")
+
+[node name="ShortL" type="MeshInstance3D" parent="Skeleton3D/ThighL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+visible = false
+mesh = SubResource("CylinderMesh_bcnnh")
+surface_material_override/0 = ExtResource("9_5kfvl")
 
 [node name="ThighR" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.9, 0)
@@ -2115,6 +2196,17 @@ surface_material_override/0 = ExtResource("4_rdq6j")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
 mesh = SubResource("SphereMesh_xlax6")
 surface_material_override/0 = ExtResource("4_rdq6j")
+
+[node name="NewKneeR" type="MeshInstance3D" parent="Skeleton3D/ThighR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
+visible = false
+mesh = SubResource("SphereMesh_iyesg")
+
+[node name="ShortR" type="MeshInstance3D" parent="Skeleton3D/ThighR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+visible = false
+mesh = SubResource("CylinderMesh_bcnnh")
+surface_material_override/0 = ExtResource("9_5kfvl")
 
 [node name="ShinL" type="BoneAttachment3D" parent="Skeleton3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.45, 0)
@@ -2317,6 +2409,15 @@ autostart = true
 
 [node name="HatLook" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.8, -2)
+
+[node name="TieLook" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.58558e-08, 1.20868, -1.70424)
+
+[node name="ShortLook" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.64274e-07, 0.803796, -1.16644)
+
+[node name="KneeLook" type="Node3D" parent="."]
+transform = Transform3D(-1, -3.75869e-08, -7.89302e-08, 0, 0.902856, -0.429944, 8.74228e-08, -0.429944, -0.902856, -9.33535e-08, 0.218924, -0.616164)
 
 [node name="ShadowCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)

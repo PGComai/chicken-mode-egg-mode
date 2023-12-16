@@ -3,6 +3,9 @@ extends CharacterBody3D
 signal sprinting(value)
 signal newshoes(value)
 signal newhat(value)
+signal newknees(value)
+signal newtie(value)
+signal newshorts(value)
 signal ui_msg(message)
 signal camera_shake(zero_to_one)
 
@@ -69,6 +72,19 @@ const ROLL_KNOCKBACK_STRENGTH = 10.0
 @onready var question_mark_hat = $"../Landing/HatUnlocker/QuestionMarkHat"
 @onready var hat_look = $HatLook
 @onready var shadow_cast = $ShadowCast
+@onready var bowtie = $Skeleton3D/Egg/EggMesh/Bowtie
+@onready var question_mark_tie = $"../FloatingPlatforms2/TieUnlocker/QuestionMarkTie"
+@onready var tie_look = $TieLook
+@onready var question_mark_knee = $"../SkyDonut/KneesUnlocker/QuestionMarkKnee"
+@onready var new_knee_l = $Skeleton3D/ThighL/NewKneeL
+@onready var new_knee_r = $Skeleton3D/ThighR/NewKneeR
+@onready var knee_look = $KneeLook
+@onready var question_mark_shorts = $"../Landing5/ShortsUnlocker/QuestionMarkShorts"
+@onready var short_waist = $Skeleton3D/Egg/ShortWaist
+@onready var short_l = $Skeleton3D/ThighL/ShortL
+@onready var short_r = $Skeleton3D/ThighR/ShortR
+@onready var short_look = $ShortLook
+@onready var before_donut = $"../Player Spawns/Before Donut"
 
 
 var health := 15.0:
@@ -127,15 +143,14 @@ var fire_wind_gust := false:
 var double_jump_ready := false
 var rolling := false:
 	set(value):
-		if value != rolling:
-			rolling = value
-			roll_body.position = Vector3(0.0, 0.5, 0.0)
-			roll_body.top_level = rolling
-			if not rolling:
-				roll_body.process_mode = Node.PROCESS_MODE_DISABLED
-			else:
-				roll_body.process_mode = Node.PROCESS_MODE_INHERIT
-			tall_collision.disabled = rolling
+		rolling = value
+		roll_body.position = Vector3(0.0, 0.5, 0.0)
+		roll_body.top_level = rolling
+		if not rolling:
+			roll_body.process_mode = Node.PROCESS_MODE_DISABLED
+		else:
+			roll_body.process_mode = Node.PROCESS_MODE_INHERIT
+		tall_collision.disabled = rolling
 var roll_intro := false
 var roll_windup := 0.0:
 	set(value):
@@ -153,6 +168,7 @@ var shoes_unlocked := false:
 var new_shoes := false:
 	set(value):
 		new_shoes = value
+		global.no_movement = value
 		emit_signal("newshoes", new_shoes)
 		if new_shoes:
 			shoes_unlocked = true
@@ -165,10 +181,51 @@ var hat_unlocked := false:
 var new_hat := false:
 	set(value):
 		new_hat = value
+		global.no_movement = value
 		emit_signal("newhat", new_hat)
 		if new_hat:
 			hat_unlocked = true
 			new_shoes_timer.start()
+var tie_unlocked := false:
+	set(value):
+		tie_unlocked = value
+		bowtie.visible = tie_unlocked
+var new_tie := false:
+	set(value):
+		new_tie = value
+		global.no_movement = value
+		emit_signal("newtie", new_tie)
+		if new_tie:
+			tie_unlocked = true
+			new_shoes_timer.start()
+var knees_unlocked := false:
+	set(value):
+		knees_unlocked = value
+		new_knee_l.visible = knees_unlocked
+		new_knee_r.visible = knees_unlocked
+var new_knees := false:
+	set(value):
+		new_knees = value
+		global.no_movement = value
+		emit_signal("newknees", new_knees)
+		if new_knees:
+			knees_unlocked = true
+			new_shoes_timer.start()
+var shorts_unlocked := false:
+	set(value):
+		shorts_unlocked = value
+		short_l.visible = shorts_unlocked
+		short_r.visible = shorts_unlocked
+		short_waist.visible = shorts_unlocked
+var new_shorts := false:
+	set(value):
+		new_shorts = value
+		global.no_movement = value
+		emit_signal("newshorts", new_shorts)
+		if new_shorts:
+			shorts_unlocked = true
+			new_shoes_timer.start()
+
 var not_in_control := false:
 	set(value):
 		not_in_control = value
@@ -260,7 +317,7 @@ func _physics_process(delta):
 		falling = false
 		global_position = spawn_node.global_position
 	
-	if not not_in_control:
+	if not not_in_control and not global.no_movement:
 		var sprint := 1.0
 		
 		if not is_on_floor() and not rolling:
@@ -310,7 +367,7 @@ func _physics_process(delta):
 			
 			var direction : Vector3 = (cam_hinge_h.transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 			var body_face_angle = direction.signed_angle_to(Vector3.FORWARD, Vector3.UP)
-			if new_hat or new_shoes:
+			if new_hat or new_shoes or new_tie:
 				velocity.x = lerp(velocity.x, 0.0, 0.3)
 				velocity.z = lerp(velocity.z, 0.0, 0.3)
 				animation_player.current_animation = "RESET"
@@ -498,7 +555,7 @@ func _on_roll_body_body_entered(body):
 			print("damage")
 			body.health -= ROLL_DAMAGE * damage_multiplier
 		if body.is_in_group("knockbackable"):
-			body.knockback_strength = ROLL_KNOCKBACK_STRENGTH * damage_multiplier
+			body.knockback_strength = ROLL_KNOCKBACK_STRENGTH * damage_multiplier * 0.1
 			var dir = global_position.direction_to(body.knockback_reciever.global_position)
 			body.knockback_direction = Vector3(dir.x, 1.0, dir.y).normalized()
 			body.knockback = true
@@ -526,6 +583,7 @@ func _on_crack_heal_timer_timeout():
 func _on_new_shoes_timer_timeout():
 	new_shoes = false
 	new_hat = false
+	new_tie = false
 
 
 func _on_shoe_unlocker_body_entered(body):
@@ -548,5 +606,31 @@ func _on_hat_unlocker_body_entered(body):
 
 func _on_ui_gui_input(event):
 	if event is InputEventMouseMotion and not not_in_control:
-		rot_h -= event.relative.x * SENSITIVITY
-		rot_v -= event.relative.y * SENSITIVITY
+		rot_h -= event.relative.x * SENSITIVITY * global.sensitivity_multiplier
+		rot_v -= event.relative.y * SENSITIVITY * global.sensitivity_multiplier
+
+
+func _on_tie_unlocker_body_entered(body):
+	if body == self and not tie_unlocked:
+		question_mark_tie.visible = false
+		new_tie = true
+		emit_signal("ui_msg", "New Bowtie Unlocked!")
+
+
+func _on_knees_unlocker_body_entered(body):
+	if body == self and not knees_unlocked:
+		question_mark_knee.visible = false
+		new_knees = true
+		emit_signal("ui_msg", "New Knees Unlocked!")
+
+
+func _on_shorts_unlocker_body_entered(body):
+	if body == self and not shorts_unlocked:
+		question_mark_shorts.visible = false
+		new_shorts = true
+		emit_signal("ui_msg", "New Shorts Unlocked!")
+
+
+func _on_before_donut_area_body_entered(body):
+	if body == self:
+		spawn_node = before_donut

@@ -14,6 +14,8 @@ var player_node: CharacterBody3D:
 		player_node = value
 		emit_signal("player_node_changed", value)
 var nav_baked := true
+var no_movement := false
+var sensitivity_multiplier := 1.0
 
 
 # Called when the node enters the scene tree for the first time.
